@@ -1,5 +1,5 @@
 {
-  "name" : "elastic/openapi-codegen",
+  "name" : "arnedesmedt/openapi-codegen",
   "description" : "A base library used to create Elastic PHP clients.",
   "homepage": "https://github.com/elastic/openapi-codegen-php",
   "keywords" : [
