@@ -1,5 +1,4 @@
 <?php
-{{>header}}
 
 declare(strict_types=1);
 
@@ -23,13 +22,10 @@ use Elastic\OpenApi\Codegen\AbstractClient;
      * Documentation: {{url}}
      *
 {{/externalDocs}}
-{{#allParams}}
-     * @param {{dataType}} ${{paramName}}{{#description}} {{description}}{{/description}}
-{{/allParams}}
      *
      * @return array
      */
-    {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#allParams}}${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
+    {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}{{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/pathParams}})
     {
 {{#allParams.0}}
         $params = [
