@@ -1,16 +1,14 @@
 <?php
 {{>header}}
 
+declare(strict_types=1);
+
 namespace {{package}};
 
-/**
- * Implementation of the {{classname}} endpoint.
- *
- * @package {{package}}
- */
-class {{classname}} extends \Elastic\OpenApi\Codegen\Endpoint\AbstractEndpoint
+use Elastic\OpenApi\Codegen\Endpoint\AbstractEndpoint;
+
+class {{classname}} extends AbstractEndpoint
 {
-// phpcs:disable
 {{#operations}}
 {{#operation}}
     protected string $method = '{{httpMethod}}';
@@ -18,13 +16,12 @@ class {{classname}} extends \Elastic\OpenApi\Codegen\Endpoint\AbstractEndpoint
     protected string $uri = '{{path}}';
 {{#pathParams.0}}
 
-    protected ?array $routeParams = [{{#pathParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/pathParams}}];
+    protected array $routeParams = [{{#pathParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/pathParams}}];
 {{/pathParams.0}}
 {{#queryParams.0}}
 
-    protected ?array $paramWhitelist = [{{#queryParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/queryParams}}];
+    protected array $paramWhitelist = [{{#queryParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/queryParams}}];
 {{/queryParams.0}}
 {{/operation}}
 {{/operations}}
-// phpcs:enable
 }

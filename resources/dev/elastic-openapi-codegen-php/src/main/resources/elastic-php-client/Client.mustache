@@ -1,16 +1,14 @@
 <?php
 {{>header}}
 
+declare(strict_types=1);
+
 namespace {{invokerPackage}};
 
-/**
- * Client implementation.
- *
- * @package {{invokerPackage}}
- */
-{{#clientClassQualifier}}{{{.}}} {{/clientClassQualifier}}class {{clientClass}} extends \Elastic\OpenApi\Codegen\AbstractClient
+use Elastic\OpenApi\Codegen\AbstractClient;
+
+{{#clientClassQualifier}}{{{.}}} {{/clientClassQualifier}}class {{clientClass}} extends AbstractClient
 {
-    // phpcs:disable
 {{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}
     /**
 {{#summary}}
@@ -55,5 +53,4 @@ namespace {{invokerPackage}};
         return $this->performRequest($endpoint);
     }
 {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}}
-    // phpcs:enable
 }
