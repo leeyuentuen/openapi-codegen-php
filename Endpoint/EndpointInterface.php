@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the Elastic OpenAPI PHP code generator.
  *
@@ -11,56 +13,48 @@ namespace Elastic\OpenApi\Codegen\Endpoint;
 
 /**
  * API endpoint interface.
- *
- * @package Elastic\OpenApi\Codegen
- * @author  Aurélien FOUCRET <aurelien.foucret@elastic.co>
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache2
  */
 interface EndpointInterface
 {
     /**
      * HTTP method for the current endpoint.
-     *
-     * @return string
      */
-    public function getMethod();
+    public function method() : string;
 
     /**
      * URI for the current endpoint.
-     *
-     * @return string
      */
-    public function getURI();
+    public function uri() : string;
 
     /**
      * Params data for the current endpoint.
      *
-     * @return string[]|null
+     * @return array<string>
      */
-    public function getParams();
+    public function params() : array;
 
     /**
      * Body content for the current endpoint.
      *
-     * @return array|null
+     * @return array<mixed>|null
      */
-    public function getBody();
+    public function body() : ?array;
 
     /**
      * Set body data for the endpoint.
      *
-     * @param array|null $body body data
+     * @param array<mixed>|null $body
      *
-     * @return $this
+     * @return static
      */
-    public function setBody($body);
+    public function setBody(?array $body);
 
     /**
      * Set params data for the endpoint.
      *
-     * @param array|null $params params data
+     * @param array<string> $params
      *
-     * @return $this
+     * @return static
      */
-    public function setParams($params);
+    public function setParams(?array $params);
 }

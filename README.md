@@ -107,7 +107,7 @@ class ClientBuilder extends \Elastic\OpenApi\Codegen\AbstractClientBuilder
      */
     public function build()
     {
-        return new Client($this->getEndpointBuilder(), $this->getConnection());
+        return new Client($this->getEndpointBuilder(), $this->connection());
     }
 
     /**

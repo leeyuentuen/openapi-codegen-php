@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the Elastic OpenAPI PHP code generator.
  *
@@ -9,54 +11,81 @@
 
 namespace Elastic\OpenApi\Codegen;
 
-use Elastic\OpenApi\Codegen\Connection\Connection;
+use Elastic\OpenApi\Codegen\Endpoint\EndpointInterface;
+use Elastic\OpenApi\Codegen\Exception\ExceptionHandler;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * A base client implementation implemented by the generator.
- *
- * @package Elastic\OpenApi\Codegen
- * @author  Aurélien FOUCRET <aurelien.foucret@elastic.co>
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache2
  */
 abstract class AbstractClient
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Client $connection;
 
-    /**
-     * @var callable
-     */
+    /** @var callable */
     private $endpointBuilder;
 
-    /**
-     * Client constructor.
-     *
-     * @param callable   $endpointBuilder Allow to access endpoints.
-     * @param Connection $connection      HTTP connection handler.
-     */
-    public function __construct(callable $endpointBuilder, Connection $connection)
+    /** @var callable|null */
+    protected $exceptionHandler = null;
+
+    public function __construct(callable $endpointBuilder, Client $connection)
     {
         $this->endpointBuilder = $endpointBuilder;
         $this->connection = $connection;
     }
 
-    protected function getEndpoint($name)
+    protected function endpoint(string $name) : EndpointInterface
     {
         $endpointBuilder = $this->endpointBuilder;
+
         return $endpointBuilder($name);
     }
 
+    /**
+     * @return mixed
+     */
     protected function performRequest(Endpoint\EndpointInterface $endpoint)
     {
-        $method = $endpoint->getMethod();
-        $uri = $endpoint->getURI();
-        $params = $endpoint->getParams();
-        $body = $endpoint->getBody();
+        $method = $endpoint->method();
+        $uri = $endpoint->uri();
 
-        $response = $this->connection->performRequest($method, $uri, $params, $body);
+        $options = $this->buildOptions($endpoint);
 
-        return isset($response['body']) ? $response['body'] : $response;
+        try {
+            $response = $this->connection->request($method, $uri, $options);
+        } catch (ClientException $exception) {
+            throw ExceptionHandler::fromGuzzleClientException($exception, $this->exceptionHandler);
+        }
+
+        $contents = $response->getBody()->getContents();
+        $body = json_decode($contents, true);
+
+        if ($body === null) {
+            return $contents;
+        }
+
+        return $body;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    protected function buildOptions(Endpoint\EndpointInterface $endpoint) : array
+    {
+        $params = $endpoint->params();
+        $body = $endpoint->body();
+
+        $options = [];
+
+        if (! empty($params)) {
+            $options['query'] = $params;
+        }
+
+        if (! empty($body)) {
+            $options['json'] = $body;
+        }
+
+        return $options;
     }
 }

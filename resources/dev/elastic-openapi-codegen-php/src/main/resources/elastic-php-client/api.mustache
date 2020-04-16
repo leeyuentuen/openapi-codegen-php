@@ -13,22 +13,16 @@ class {{classname}} extends \Elastic\OpenApi\Codegen\Endpoint\AbstractEndpoint
 // phpcs:disable
 {{#operations}}
 {{#operation}}
-    /**
-     * @var string
-     */
-    protected $method = '{{httpMethod}}';
+    protected string $method = '{{httpMethod}}';
 
-    /**
-     * @var string
-     */
-    protected $uri = '{{path}}';
+    protected string $uri = '{{path}}';
 {{#pathParams.0}}
 
-    protected $routeParams = [{{#pathParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/pathParams}}];
+    protected ?array $routeParams = [{{#pathParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/pathParams}}];
 {{/pathParams.0}}
 {{#queryParams.0}}
 
-    protected $paramWhitelist = [{{#queryParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/queryParams}}];
+    protected ?array $paramWhitelist = [{{#queryParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/queryParams}}];
 {{/queryParams.0}}
 {{/operation}}
 {{/operations}}

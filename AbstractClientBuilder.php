@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the Elastic OpenAPI PHP code generator.
  *
@@ -9,159 +11,42 @@
 
 namespace Elastic\OpenApi\Codegen;
 
-use Elastic\OpenApi\Codegen\Serializer\SerializerInterface;
-use Elastic\OpenApi\Codegen\Serializer\SmartSerializer;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-use GuzzleHttp\Ring\Client\CurlHandler;
-use Elastic\OpenApi\Codegen\Connection\Connection;
-use Elastic\OpenApi\Codegen\Connection\Handler\RequestSerializationHandler;
-use Elastic\OpenApi\Codegen\Connection\Handler\RequestHostHandler;
-use Elastic\OpenApi\Codegen\Connection\Handler\ConnectionErrorHandler;
-use Elastic\OpenApi\Codegen\Connection\Handler\ResponseSerializationHandler;
 use Elastic\OpenApi\Codegen\Endpoint\Builder as EndpointBuilder;
+use GuzzleHttp\Client;
+use RuntimeException;
 
 /**
  * A base client builder implementation.
- *
- * @package Elastic\OpenApi\Codegen
- * @author  Aurélien FOUCRET <aurelien.foucret@elastic.co>
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache2
  */
 abstract class AbstractClientBuilder
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
+    protected ?Client $client;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * Return the configured client.
      */
-    private $tracer;
+    abstract public function build() : void;
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var string
-     */
-    private $host;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
+    protected function connection() : Client
     {
-        $this->serializer = new SmartSerializer();
-        $this->logger = new NullLogger();
-        $this->tracer = new NullLogger();
+        if ($this->client === null) {
+            throw new RuntimeException(
+                'Couldn\'t create a connection if no guzzle client is set.'
+            );
+        }
+
+        return $this->client;
     }
 
     /**
-     * @return SerializerInterface
+     * @return static
      */
-    public function getSerializer()
+    public function setClient(Client $client)
     {
-        return $this->serializer;
-    }
-
-    /**
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * @return LoggerInterface
-     */
-    public function getTracer()
-    {
-        return $this->tracer;
-    }
-
-    /**
-     * @param SerializerInterface $serializer
-     *
-     * @return $this
-     */
-    public function setSerializer(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
+        $this->client = $client;
 
         return $this;
     }
 
-    /**
-     * @param LoggerInterface $logger
-     *
-     * @return $this
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * @param LoggerInterface $tracer
-     *
-     * @return $this
-     */
-    public function setTracer(LoggerInterface $tracer)
-    {
-        $this->tracer = $tracer;
-
-        return $this;
-    }
-
-    /**
-     * @param string $host
-     *
-     * @return $this
-     */
-    public function setHost($host)
-    {
-        $this->host = $host;
-
-        return $this;
-    }
-
-    /**
-     * Return the configured clien.
-     */
-    abstract public function build();
-
-    /**
-     * @return callable
-     */
-    protected function getHandler()
-    {
-        $handler = new CurlHandler();
-
-        $handler = new RequestSerializationHandler($handler, $this->serializer);
-        $handler = new RequestHostHandler($handler, $this->host);
-        $handler = new ConnectionErrorHandler($handler);
-        $handler = new ResponseSerializationHandler($handler, $this->serializer);
-
-        return $handler;
-    }
-
-    /**
-     * @return Connection
-     */
-    protected function getConnection()
-    {
-        return new Connection($this->getHandler(), $this->getLogger(), $this->getTracer());
-    }
-
-    /**
-     * @return EndpointBuilder
-     */
-    abstract protected function getEndpointBuilder();
+    abstract protected function endpointBuilder() : EndpointBuilder;
 }

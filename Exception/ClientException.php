@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the Elastic OpenAPI PHP code generator.
  *
@@ -11,10 +13,6 @@ namespace Elastic\OpenApi\Codegen\Exception;
 
 /**
  * Wrapper for exceptions raised by the client.
- *
- * @package Elastic\OpenApi\Codegen\Exception
- * @author  Aurélien FOUCRET <aurelien.foucret@elastic.co>
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache2
  */
 interface ClientException
 {
