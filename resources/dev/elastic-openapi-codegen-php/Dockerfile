@@ -1,4 +1,4 @@
-FROM jimschubert/8-jdk-alpine-mvn:1.0 as builder
+FROM jimschubert/8-jdk-alpine-mvn:2.0 as builder
 
 WORKDIR /build
 COPY pom.xml /build
@@ -8,7 +8,7 @@ COPY . /build/
 RUN mvn package
 
 
-FROM openapitools/openapi-generator-cli:v3.3.4 as runner
+FROM openapitools/openapi-generator-cli:v4.3.0 as runner
 
 ENV OPENAPI_GEN_ROOT_DIR /opt/openapi-generator
 ENV OPENAPI_GEN_JARS_DIR ${OPENAPI_GEN_ROOT_DIR}/jars

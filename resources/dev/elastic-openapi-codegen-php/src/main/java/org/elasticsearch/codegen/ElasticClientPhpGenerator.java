@@ -66,7 +66,7 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
 
   @Override
   public String toApiName(String name) {
-    return initialCaps(name);
+    return org.openapitools.codegen.utils.StringUtils.camelize(name);
   }
 
   @Override
@@ -106,42 +106,6 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
     }
 
     return super.getTypeDeclaration(name);
-  }
-
-  @Override
-  @SuppressWarnings("rawtypes")
-  public CodegenOperation fromOperation(String path,
-                                        String httpMethod,
-                                        Operation operation,
-                                        Map<String, Schema> schemas,
-                                        OpenAPI openAPI) {
-      processOperation(operation, openAPI);
-      CodegenOperation op = super.fromOperation(path, httpMethod, operation, schemas, openAPI);
-
-      return op;
-  }
-
-  private void processOperation(Operation operation, OpenAPI openAPI) {
-      RequestBody requestBody = ModelUtils.getReferencedRequestBody(openAPI, operation.getRequestBody());
-      if (requestBody != null) {
-          processRequestBody(requestBody, openAPI);
-      }
-  }
-
-  private void processRequestBody(RequestBody requestBody, OpenAPI openAPI) {
-      requestBody.getContent();
-      Schema<?> schema = ModelUtils.getReferencedSchema(openAPI, ModelUtils.getSchemaFromRequestBody(requestBody));
-  }
-
-  @Override
-  public CodegenParameter fromParameter(Parameter parameter, Set<String> imports) {
-    CodegenParameter codegenParameter = super.fromParameter(parameter, imports);
-
-    if (parameter.getExtensions() != null && parameter.getExtensions().containsKey("x-codegen-param-name")) {
-        codegenParameter.paramName = parameter.getExtensions().get("x-codegen-param-name").toString();
-    }
-
-    return codegenParameter;
   }
 
   private void resetTemplateFiles() {

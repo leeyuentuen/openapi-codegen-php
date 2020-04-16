@@ -41,7 +41,7 @@ use Elastic\OpenApi\Codegen\AbstractClient;
                 ->setParams({{#pathParams.0}}{{^queryParams.0}}$path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}$query){{/queryParams.0}}{{/pathParams.0}}{{#pathParams.0}}{{#queryParams.0}}array_merge($path, $query)){{/queryParams.0}}{{/pathParams.0}}
                 {{/allParams.0}}
                 {{#bodyParams.0}}
-                ->setBody(${{paramName}})
+                ->setBody($body)
                 {{/bodyParams.0}}
         );
     }
