@@ -35,7 +35,7 @@ use Elastic\OpenApi\Codegen\AbstractClient;
 {{/bodyParams.0}}
      * @return array<mixed>
      */
-    {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}{{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}{{#queryParams.0}}{{#pathParams.0}}, {{/pathParams.0}}array $query = []{{/queryParams.0}}{{#bodyParams.0}}, array $body = []{{/bodyParams.0}}) : array
+    {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}{{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}{{#queryParams.0}}{{#pathParams.0}}, {{/pathParams.0}}array $query = []{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}}, {{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}}, {{/pathParams.0}}{{/queryParams.0}}array $body = []{{/bodyParams.0}}) : array
     {
         {{#pathParams.0}}
         $path = [
