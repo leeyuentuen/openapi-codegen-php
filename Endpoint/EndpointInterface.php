@@ -52,7 +52,7 @@ interface EndpointInterface
     /**
      * Set params data for the endpoint.
      *
-     * @param array<string> $params
+     * @param array<string, mixed>|null $params
      *
      * @return static
      */

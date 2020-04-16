@@ -24,7 +24,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     protected array $routeParams = [];
     /** @var array<string>  */
     protected array $paramWhitelist = [];
-    /** @var array<string>  */
+    /** @var array<string, mixed>  */
     protected array $params = [];
     /** @var array<string>|null  */
     protected ?array $body = null;
@@ -100,7 +100,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     /**
      * Loop over the param to check all params are into the whitelist.
      *
-     * @param array<string>|null $params
+     * @param array<string, mixed>|null $params
      *
      * @throws UnexpectedValueException
      */
