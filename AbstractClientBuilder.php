@@ -25,7 +25,7 @@ abstract class AbstractClientBuilder
     /**
      * Return the configured client.
      */
-    abstract public function build() : void;
+    abstract public function build() : AbstractClient;
 
     protected function connection() : Client
     {
