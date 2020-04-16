@@ -15,10 +15,12 @@ class {{classname}} extends AbstractEndpoint
     protected string $uri = '{{path}}';
 {{#pathParams.0}}
 
+    /** @var array<string> */
     protected array $routeParams = [{{#pathParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/pathParams}}];
 {{/pathParams.0}}
 {{#queryParams.0}}
 
+    /** @var array<string> */
     protected array $paramWhitelist = [{{#queryParams}}'{{baseName}}'{{#hasMore}}, {{/hasMore}}{{/queryParams}}];
 {{/queryParams.0}}
 {{/operation}}
