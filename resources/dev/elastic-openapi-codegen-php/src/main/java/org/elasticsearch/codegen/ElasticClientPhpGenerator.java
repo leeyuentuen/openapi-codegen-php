@@ -115,7 +115,6 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
     this.apiTemplateFiles.clear();
     this.apiTestTemplateFiles.clear();
     this.apiDocTemplateFiles.clear();
-    this.modelTemplateFiles.clear();
     this.modelTestTemplateFiles.clear();
     this.modelDocTemplateFiles.clear();
 
