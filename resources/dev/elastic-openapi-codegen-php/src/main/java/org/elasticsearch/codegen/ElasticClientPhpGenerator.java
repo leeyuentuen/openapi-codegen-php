@@ -76,8 +76,6 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
       co.operationIdLowerCase = uniqueName.toLowerCase(Locale.ROOT);
       co.operationIdCamelCase = org.openapitools.codegen.utils.StringUtils.camelize(uniqueName);
       co.operationIdSnakeCase = org.openapitools.codegen.utils.StringUtils.underscore(uniqueName);
-      co.path += uniqueName + '/';
-      co.baseName = 'Endpoint';
 
       if (co.vendorExtensions == null) {
         co.vendorExtensions = new HashMap<>();
