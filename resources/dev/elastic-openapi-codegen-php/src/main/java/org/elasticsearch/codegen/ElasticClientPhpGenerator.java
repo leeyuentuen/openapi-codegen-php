@@ -130,28 +130,30 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
         List<Operation> operations = pathItem.readOperations();
 
         for(Operation operation: operations) {
-            List<Parameter> queryParameters = operation.getParameters()
+            if (operation.getParameters() != null) {
+                List<Parameter> queryParameters = operation.getParameters()
                 .stream()
                 .filter(parameter -> parameter instanceof QueryParameter)
                 .collect(Collectors.toList());
 
-            if (! queryParameters.isEmpty()) {
-                String queryName = operation.getOperationId() + "Query";
+                if (! queryParameters.isEmpty()) {
+                    String queryName = operation.getOperationId() + "Query";
 
-                Map<String, Schema> querySchemas = queryParameters
-                                .stream()
-                                .collect(Collectors.toMap(Parameter::getName, Parameter::getSchema));
+                    Map<String, Schema> querySchemas = queryParameters
+                                    .stream()
+                                    .collect(Collectors.toMap(Parameter::getName, Parameter::getSchema));
 
-                List<String> requiredParameters = queryParameters.stream()
-                    .filter(parameter -> parameter.getRequired())
-                    .map(parameter -> parameter.getName())
-                    .collect(Collectors.toList());
+                    List<String> requiredParameters = queryParameters.stream()
+                        .filter(parameter -> parameter.getRequired())
+                        .map(parameter -> parameter.getName())
+                        .collect(Collectors.toList());
 
-                ObjectSchema querySchema = new ObjectSchema();
-                querySchema.setProperties(querySchemas);
-                querySchema.setRequired(requiredParameters);
+                    ObjectSchema querySchema = new ObjectSchema();
+                    querySchema.setProperties(querySchemas);
+                    querySchema.setRequired(requiredParameters);
 
-                components.addSchemas(queryName, querySchema);
+                    components.addSchemas(queryName, querySchema);
+                }
             }
 
             RequestBody requestBody = operation.getRequestBody();
