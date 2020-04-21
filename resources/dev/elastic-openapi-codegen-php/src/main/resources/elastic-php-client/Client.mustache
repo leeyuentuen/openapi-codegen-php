@@ -24,7 +24,7 @@ namespace {{invokerPackage}};
 {{/externalDocs}}
      * @return array<mixed>
      */
-    {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}{{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}{{#queryParams.0}}{{#pathParams.0}}, {{/pathParams.0}}{{#lambda.titlecase}}{{operationId}}{{/lambda.titlecase}}Query $query{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}}, {{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}}, {{/pathParams.0}}{{/queryParams.0}}{{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}{{/bodyParams.0}}) : array
+    {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}{{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}{{#queryParams.0}}{{#pathParams.0}}, {{/pathParams.0}}?{{#lambda.titlecase}}{{operationId}}{{/lambda.titlecase}}Query $query = null{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}}, {{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}}, {{/pathParams.0}}{{/queryParams.0}}{{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}{{/bodyParams.0}}) : array
     {
         {{#pathParams.0}}
         $path = [
@@ -38,7 +38,7 @@ namespace {{invokerPackage}};
             $this
                 ->endpoint('{{classname}}')
                 {{#allParams.0}}
-                ->setParams({{#pathParams.0}}{{^queryParams.0}}$path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}$query->toArray()){{/queryParams.0}}{{/pathParams.0}}{{#pathParams.0}}{{#queryParams.0}}$path + $query->toArray()){{/queryParams.0}}{{/pathParams.0}}
+                ->setParams({{#pathParams.0}}{{^queryParams.0}}$path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}$query ? $query->toArray() : []){{/queryParams.0}}{{/pathParams.0}}{{#pathParams.0}}{{#queryParams.0}}$path + ($query ? $query->toArray() : [])){{/queryParams.0}}{{/pathParams.0}}
                 {{/allParams.0}}
                 {{#bodyParams.0}}
                 ->setBody({{#bodyParams.0.required}}$body->toArray(){{/bodyParams.0.required}}{{^bodyParams.0.required}}$body ? $body->toArray() : []{{/bodyParams.0.required}})
