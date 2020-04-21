@@ -13,6 +13,7 @@ final class {{classname}} implements ImmutableRecord
     use ImmutableRecordLogic;
 
 // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty
+// phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
 {{#vars}}
     private {{^required}}?{{/required}}{{dataType}} ${{baseName}};
 {{/vars}}
