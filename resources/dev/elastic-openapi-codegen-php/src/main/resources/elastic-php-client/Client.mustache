@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace {{invokerPackage}};
 
 {{#models}}{{#model}}use {{modelPackage}}\{{classname}};
-{{/model}}{{/models}}
-use Elastic\OpenApi\Codegen\AbstractClient;
+{{/model}}{{/models}}use Elastic\OpenApi\Codegen\AbstractClient;
 
 {{#clientClassQualifier}}{{{.}}} {{/clientClassQualifier}}class {{clientClass}} extends AbstractClient
 {{=<% %>=}}{<%#apiInfo%><%={{ }}=%>{{#apis}}{{#operations}}{{#operation}}
