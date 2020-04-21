@@ -29,6 +29,9 @@ abstract class AbstractClient
     /** @var callable|null */
     protected $exceptionHandler = null;
 
+    /** @var callable|null */
+    protected $optionBuilder = null;
+
     public function __construct(callable $endpointBuilder, Client $connection)
     {
         $this->endpointBuilder = $endpointBuilder;
@@ -41,6 +44,16 @@ abstract class AbstractClient
     public function setExceptionHandler(callable $exceptionHandler)
     {
         $this->exceptionHandler = $exceptionHandler;
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function setOptionBuilder(callable $optionBuilder)
+    {
+        $this->optionBuilder = $optionBuilder;
 
         return $this;
     }
@@ -83,6 +96,16 @@ abstract class AbstractClient
      */
     protected function buildOptions(Endpoint\EndpointInterface $endpoint) : array
     {
+        if ($this->optionBuilder) {
+            $optionBuilder = $this->optionBuilder;
+
+            $options = $optionBuilder($endpoint);
+
+            if ($options !== null) {
+                return $options;
+            }
+        }
+
         $params = $endpoint->params();
         $body = $endpoint->body();
 
