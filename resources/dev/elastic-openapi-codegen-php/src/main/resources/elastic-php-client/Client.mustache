@@ -22,18 +22,6 @@ namespace {{invokerPackage}};
      * Documentation: {{url}}
      *
 {{/externalDocs}}
-{{#queryParams.0}}
-     * @param array<string, mixed> $query
-{{^bodyParams.0}}
-     *
-{{/bodyParams.0}}
-{{/queryParams.0}}
-{{#bodyParams.0}}
-     * @param array<string, mixed> $body
-{{^queryParams.0}}
-     *
-{{/queryParams.0}}
-{{/bodyParams.0}}
      * @return array<mixed>
      */
     {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}{{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}{{#queryParams.0}}{{#pathParams.0}}, {{/pathParams.0}}{{#lambda.titlecase}}{{operationId}}{{/lambda.titlecase}}Query $query{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}}, {{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}}, {{/pathParams.0}}{{/queryParams.0}}{{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}{{/bodyParams.0}}) : array
