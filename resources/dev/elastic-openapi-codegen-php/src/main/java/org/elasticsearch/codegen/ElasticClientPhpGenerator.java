@@ -2,11 +2,19 @@ package org.elasticsearch.codegen;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.parameters.QueryParameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.PathItem;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
@@ -106,6 +114,71 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
     }
 
     return super.getTypeDeclaration(name);
+  }
+
+  @Override
+  public void preprocessOpenAPI(OpenAPI openAPI) {
+    super.preprocessOpenAPI(openAPI);
+
+    Collection<PathItem> paths = openAPI.getPaths().values();
+
+    Components components = openAPI.getComponents();
+    Map<String, Schema> schemas = components.getSchemas();
+    Map<String, RequestBody> requestBodies = openAPI.getComponents().getRequestBodies();
+
+    for (PathItem pathItem : paths) {
+        List<Operation> operations = pathItem.readOperations();
+
+        for(Operation operation: operations) {
+            List<Parameter> queryParameters = operation.getParameters()
+                .stream()
+                .filter(parameter -> parameter instanceof QueryParameter)
+                .collect(Collectors.toList());
+
+            if (! queryParameters.isEmpty()) {
+                String queryName = operation.getOperationId() + "Query";
+
+                Map<String, Schema> querySchemas = queryParameters
+                                .stream()
+                                .collect(Collectors.toMap(Parameter::getName, Parameter::getSchema));
+
+                List<String> requiredParameters = queryParameters.stream()
+                    .filter(parameter -> parameter.getRequired())
+                    .map(parameter -> parameter.getName())
+                    .collect(Collectors.toList());
+
+                ObjectSchema querySchema = new ObjectSchema();
+                querySchema.setProperties(querySchemas);
+                querySchema.setRequired(requiredParameters);
+
+                components.addSchemas(queryName, querySchema);
+            }
+
+            RequestBody requestBody = operation.getRequestBody();
+
+            if (requestBody == null) {
+                continue;
+            }
+
+            String requestBodyRef = requestBody.get$ref();
+            String simpleRef = ModelUtils.getSimpleRef(requestBodyRef);
+            String newSimpleRef = operation.getOperationId() + "Body";
+            String newRequestBodyRef = requestBodyRef.replace(simpleRef, newSimpleRef);
+            String newSchemaRef = newRequestBodyRef.replace("requestBodies", "schemas");
+
+            Schema schema = schemas.get(simpleRef);
+            schemas.remove(simpleRef);
+            schemas.put(newSimpleRef, schema);
+
+            RequestBody componentRequestBody = requestBodies.get(simpleRef);
+            requestBodies.remove(simpleRef);
+            requestBodies.put(newSimpleRef, componentRequestBody);
+
+            ModelUtils.getSchemaFromRequestBody(componentRequestBody).set$ref(newSchemaRef);
+
+            requestBody.set$ref(newRequestBodyRef);
+        }
+    }
   }
 
   private void resetTemplateFiles() {

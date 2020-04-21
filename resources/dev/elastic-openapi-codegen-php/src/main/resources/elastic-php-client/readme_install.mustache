@@ -1,7 +1,21 @@
-## Getting started 🐣
+## Getting started
 
-You can install the client in your project by using composer:
+You can install the client in your project by using composer.
+
+Add the package to the repositories list in the composer file of the project:
+
+```json
+    "repositories": [
+        {
+            "type": "git",
+            "url":  "git@git.combell-ops.net:{{gitUserId}}/{{gitRepoId}}"
+        }
+    ]
+```
+
+And install the package:
+
 
 ```bash
-composer require {{gitUserId}}/{{gitRepoId}}
+composer require {{packageName}}
 ```

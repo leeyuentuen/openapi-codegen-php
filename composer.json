@@ -17,7 +17,7 @@
     "php" : "^7.4",
     "psr/log" : "^1.0.",
     "guzzlehttp/guzzle": "^6.5",
-    "event-engine/php-json-schema": "2.0-beta.1"
+    "event-engine/php-data": "2.0-beta.4"
   },
   "require-dev" : {
     "phpunit/phpunit" : "^5.6.0|^6.3.0",

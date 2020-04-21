@@ -4,26 +4,16 @@ declare(strict_types=1);
 
 namespace {{modelPackage}};
 
-use EventEngine\JsonSchema\JsonSchemaAwareRecord;
-use EventEngine\JsonSchema\JsonSchemaAwareRecordLogic;
+use EventEngine\Data\ImmutableRecord;
+use EventEngine\Data\ImmutableRecordLogic;
 
 {{#model}}
-final class {{classname}} implements JsonSchemaAwareRecord
+final class {{classname}} implements ImmutableRecord
 {
-    use JsonSchemaAwareRecordLogic;
+    use ImmutableRecordLogic;
 
 {{#vars}}
     private {{dataType}} ${{baseName}};
 {{/vars}}
-
-{{#vars}}
-    public function {{baseName}}() : {{dataType}}
-    {
-        return $this->{{baseName}};
-    }{{#hasMore}}
-
-{{/hasMore}}
-{{/vars}}
-
 }
 {{/model}}{{/models}}
