@@ -35,6 +35,16 @@ abstract class AbstractClient
         $this->connection = $connection;
     }
 
+    /**
+     * @return static
+     */
+    public function setExceptionHandler(callable $exceptionHandler)
+    {
+        $this->exceptionHandler = $exceptionHandler;
+
+        return $this;
+    }
+
     protected function endpoint(string $name) : EndpointInterface
     {
         $endpointBuilder = $this->endpointBuilder;
