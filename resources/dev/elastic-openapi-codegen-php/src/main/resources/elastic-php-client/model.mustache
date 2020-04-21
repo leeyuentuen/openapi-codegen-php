@@ -13,7 +13,7 @@ final class {{classname}} implements ImmutableRecord
     use ImmutableRecordLogic;
 
 {{#vars}}
-    private {{dataType}} ${{baseName}};
+    private {{^required}}?{{/required}}{{dataType}} ${{baseName}};
 {{/vars}}
 }
 {{/model}}{{/models}}
