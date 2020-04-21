@@ -184,30 +184,9 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
   }
 
   @Override
-    public void postProcessFile(File file, String fileType) {
-        if (file == null) {
-            return;
-        }
-
-        String phpPostProcessFile = "vendor/bin/phpcbf --report=full --extensions=php";
-
-        // only process files with php extension
-        if ("php".equals(FilenameUtils.getExtension(file.toString()))) {
-            String command = phpPostProcessFile + " " + file.toString();
-            try {
-                Process p = Runtime.getRuntime().exec(command);
-                p.waitFor();
-                int exitValue = p.exitValue();
-                if (exitValue != 0) {
-                    LOGGER.error("Error running the command ({}). Exit value: {}", command, exitValue);
-                } else {
-                    LOGGER.info("Successfully executed: " + command);
-                }
-            } catch (Exception e) {
-                LOGGER.error("Error running the command ({}). Exception: {}", command, e.getMessage());
-            }
-        }
-    }
+  public void postProcessFile(File file, String fileType) {
+      return;
+  }
 
   private void resetTemplateFiles() {
     this.supportingFiles.clear();
