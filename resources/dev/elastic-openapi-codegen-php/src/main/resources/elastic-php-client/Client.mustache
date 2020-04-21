@@ -38,7 +38,7 @@ namespace {{invokerPackage}};
             $this
                 ->endpoint('{{classname}}')
                 {{#allParams.0}}
-                ->setParams({{#pathParams.0}}{{^queryParams.0}}$path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}$query->toArray()){{/queryParams.0}}{{/pathParams.0}}{{#pathParams.0}}{{#queryParams.0}}array_merge($path, $query->toArray())){{/queryParams.0}}{{/pathParams.0}}
+                ->setParams({{#pathParams.0}}{{^queryParams.0}}$path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}$query->toArray()){{/queryParams.0}}{{/pathParams.0}}{{#pathParams.0}}{{#queryParams.0}}$path + $query->toArray()){{/queryParams.0}}{{/pathParams.0}}
                 {{/allParams.0}}
                 {{#bodyParams.0}}
                 ->setBody({{#bodyParams.0.required}}$body->toArray(){{/bodyParams.0.required}}{{^bodyParams.0.required}}$body ? $body->toArray() : []{{/bodyParams.0.required}})

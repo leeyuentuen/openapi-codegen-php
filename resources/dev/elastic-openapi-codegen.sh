@@ -26,3 +26,5 @@ docker run --rm -v ${rootdir}:/local ${generaroimage} generate -g elastic-php-cl
                                                                -o /local/ \
                                                                -c /local/resources/api/config.json \
                                                                -t /local/resources/api/templates
+
+sudo chown $USER:$USER -R ${rootdir}/Client.php ${rootdir}/Model ${rootdir}/Endpoint
