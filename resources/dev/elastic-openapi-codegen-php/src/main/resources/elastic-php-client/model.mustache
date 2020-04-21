@@ -1,5 +1,6 @@
 <?php
 {{#models}}
+
 declare(strict_types=1);
 
 namespace {{modelPackage}};
@@ -18,5 +19,4 @@ final class {{classname}} implements ImmutableRecord
     private {{^required}}?{{/required}}{{dataType}} ${{baseName}};
 {{/vars}}
 // phpcs:enable
-}
-{{/model}}{{/models}}
+}{{/model}}{{/models}}
