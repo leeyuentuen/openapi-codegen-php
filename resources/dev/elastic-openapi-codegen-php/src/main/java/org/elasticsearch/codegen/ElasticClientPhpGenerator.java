@@ -164,6 +164,11 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
             }
 
             String requestBodyRef = requestBody.get$ref();
+
+            if (requestBodyRef == null) {
+                continue;
+            }
+
             String simpleRef = ModelUtils.getSimpleRef(requestBodyRef);
             String newSimpleRef = operation.getOperationId() + "Body";
             String newRequestBodyRef = requestBodyRef.replace(simpleRef, newSimpleRef);
