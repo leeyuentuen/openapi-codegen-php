@@ -3,6 +3,7 @@ package org.elasticsearch.codegen;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.ObjectSchema;
@@ -22,8 +23,10 @@ import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.PhpClientCodegen;
 import org.openapitools.codegen.utils.ModelUtils;
 
-public class ElasticClientPhpGenerator extends PhpClientCodegen implements CodegenConfig {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class ElasticClientPhpGenerator extends PhpClientCodegen implements CodegenConfig {
   public static final String GENERATOR_NAME         = "elastic-php-client";
   public static final String HELP_URL               = "helpUrl";
   public static final String COPYRIGHT              = "copyright";
@@ -129,12 +132,11 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
 
     for (PathItem pathItem : paths) {
         List<Operation> operations = pathItem.readOperations();
-
         for(Operation operation: operations) {
             if (operation.getParameters() != null) {
                 List<Parameter> queryParameters = operation.getParameters()
                 .stream()
-                .filter(parameter -> parameter instanceof QueryParameter)
+                .filter(parameter -> parameter.getIn() == "query")
                 .collect(Collectors.toList());
 
                 if (! queryParameters.isEmpty()) {
@@ -142,11 +144,17 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
 
                     Map<String, Schema> querySchemas = queryParameters
                                     .stream()
+                                    .map(parameter -> {
+                                        parameter.setName(org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true));
+
+                                        return parameter;
+                                    })
                                     .collect(Collectors.toMap(Parameter::getName, Parameter::getSchema));
 
-                    List<String> requiredParameters = queryParameters.stream()
-                        .filter(parameter -> parameter.getRequired())
-                        .map(parameter -> parameter.getName())
+                    List<String> requiredParameters = queryParameters
+                        .stream()
+                        .filter(parameter -> parameter.getRequired() == null || parameter.getRequired() == false)
+                        .map(parameter -> org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true))
                         .collect(Collectors.toList());
 
                     ObjectSchema querySchema = new ObjectSchema();
