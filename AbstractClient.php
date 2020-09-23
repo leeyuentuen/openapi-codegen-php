@@ -85,7 +85,7 @@ abstract class AbstractClient
         $body = json_decode($contents, true);
 
         if ($body === null) {
-            return $contents;
+            return [];
         }
 
         return $body;
