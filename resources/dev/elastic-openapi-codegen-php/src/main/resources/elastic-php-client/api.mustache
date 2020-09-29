@@ -12,7 +12,7 @@ class {{classname}} extends AbstractEndpoint
 {{#operation}}
     protected string $method = '{{httpMethod}}';
 
-    protected string $uri = '{{path}}';
+    protected string $uri = '{{basePathWithoutHost}}{{path}}';
 {{#pathParams.0}}
 
     /** @var array<string> */
