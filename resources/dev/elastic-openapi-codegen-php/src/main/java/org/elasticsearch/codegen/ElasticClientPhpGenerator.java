@@ -144,17 +144,20 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
 
                     Map<String, Schema> querySchemas = queryParameters
                                     .stream()
-                                    .map(parameter -> {
-                                        parameter.setName(org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true));
-
-                                        return parameter;
-                                    })
+                                    // Don't camelize query parameters
+                                    // https://test.net/api?vlan_id=3915 vs https://test.net/api?vlanId=3915
+//                                     .map(parameter -> {
+//                                         parameter.setName(org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true));
+//
+//                                         return parameter;
+//                                     })
                                     .collect(Collectors.toMap(Parameter::getName, Parameter::getSchema));
 
                     List<String> requiredParameters = queryParameters
                         .stream()
                         .filter(parameter -> !(parameter.getRequired() == null || parameter.getRequired() == false))
-                        .map(parameter -> org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true))
+                        // see above
+//                         .map(parameter -> org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true))
                         .collect(Collectors.toList());
 
                     ObjectSchema querySchema = new ObjectSchema();
