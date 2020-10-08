@@ -156,6 +156,7 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
                     List<String> requiredParameters = queryParameters
                         .stream()
                         .filter(parameter -> !(parameter.getRequired() == null || parameter.getRequired() == false))
+                        .map(parameter -> parameter.getName())
                         // see above
 //                         .map(parameter -> org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true))
                         .collect(Collectors.toList());
