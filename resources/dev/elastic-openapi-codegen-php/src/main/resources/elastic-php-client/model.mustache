@@ -15,8 +15,8 @@ final class {{classname}} implements ImmutableRecord
 
 // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
-{{#vars}}{{#isListContainer}}
-    /** @var {{dataType}}<{{items.dataType}}>{{^required}}|null{{/required}} */{{/isListContainer}}
+{{#vars}}{{#isListContainer}}{{^complexType}}
+    /** @var {{dataType}}<{{items.dataType}}>{{^required}}|null{{/required}} */{{/complexType}}{{/isListContainer}}
     private {{^required}}?{{/required}}{{#complexType}}{{{.}}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}} ${{baseName}}{{^required}} = null{{/required}};
 {{/vars}}
 // phpcs:enable
