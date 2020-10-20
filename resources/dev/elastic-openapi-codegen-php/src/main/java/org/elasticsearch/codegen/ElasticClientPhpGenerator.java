@@ -12,6 +12,7 @@ import io.swagger.v3.oas.models.parameters.QueryParameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.PathItem.HttpMethod;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -124,15 +125,17 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
   public void preprocessOpenAPI(OpenAPI openAPI) {
     super.preprocessOpenAPI(openAPI);
 
-    Collection<PathItem> paths = openAPI.getPaths().values();
+    Paths paths = openAPI.getPaths();
 
     Components components = openAPI.getComponents();
     Map<String, Schema> schemas = components.getSchemas();
     Map<String, RequestBody> requestBodies = openAPI.getComponents().getRequestBodies();
 
-    for (PathItem pathItem : paths) {
-        List<Operation> operations = pathItem.readOperations();
-        for(Operation operation: operations) {
+    for (String pathName : paths.keySet()) {
+        PathItem pathItem = paths.get(pathName);
+        Map<HttpMethod, Operation>  operations = pathItem.readOperationsMap();
+        for(HttpMethod method: operations.keySet()) {
+            Operation operation = operations.get(method);
             if (operation.getParameters() != null) {
                 List<Parameter> queryParameters = operation.getParameters()
                 .stream()
@@ -140,6 +143,10 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
                 .collect(Collectors.toList());
 
                 if (! queryParameters.isEmpty()) {
+                    if (operation.getOperationId() == null) {
+                        operation.setOperationId(getOrGenerateOperationId(operation, pathName, method.toString().toLowerCase()));
+                    }
+
                     String queryName = operation.getOperationId() + "Query";
 
                     Map<String, Schema> querySchemas = queryParameters
