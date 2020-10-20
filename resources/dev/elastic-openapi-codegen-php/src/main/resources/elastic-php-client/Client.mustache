@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace {{invokerPackage}};
 
 {{#apiInfo.apis}}{{#operations}}{{#operation}}{{#queryParams.0}}use {{invokerPackage}}\Model\{{operationIdCamelCase}}Query;
-{{/queryParams.0}}{{#bodyParams.0}}use {{invokerPackage}}\Model\{{bodyParams.0.baseType}}Body;
+{{/queryParams.0}}{{#bodyParams.0}}use {{invokerPackage}}\Model\{{bodyParams.0.baseType}};
 {{/bodyParams.0}}{{/operation}}{{/operations}}{{/apiInfo.apis}}use Elastic\OpenApi\Codegen\AbstractClient;
 
 {{#clientClassQualifier}}{{{.}}} {{/clientClassQualifier}}class {{clientClass}} extends AbstractClient
