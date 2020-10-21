@@ -25,8 +25,14 @@ namespace {{invokerPackage}};
 {{/externalDocs}}
      * @return array<mixed>
      */
-    {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}{{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}{{#queryParams.0}}{{#pathParams.0}}, {{/pathParams.0}}?{{operationIdCamelCase}}Query $query = null{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}}, {{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}}, {{/pathParams.0}}{{/queryParams.0}}{{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}{{/bodyParams.0}}): array
-    {
+    {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}
+        {{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}},{{/hasMore}}{{/pathParams}}{{#pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}
+    {{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}}{{#queryParams.0}}{{#pathParams.0}},{{/pathParams.0}}
+        ?{{operationIdCamelCase}}Query $query = null{{^bodyParams.0}}
+    {{/bodyParams.0}}{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}},{{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}
+        {{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}
+    {{/bodyParams.0}}): array{{^pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}
+   {{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}} {
         {{#pathParams.0}}
         $path = [
             {{#pathParams}}
