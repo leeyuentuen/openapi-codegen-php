@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace {{invokerPackage}};
 
 {{#apiInfo.apis}}{{#operations}}{{#operation}}{{#queryParams.0}}use {{invokerPackage}}\Model\{{operationIdCamelCase}}Query;
-{{/queryParams.0}}{{#bodyParams.0}}use {{invokerPackage}}\Model\{{bodyParams.0.baseType}};
-{{/bodyParams.0}}{{/operation}}{{/operations}}{{/apiInfo.apis}}use Elastic\OpenApi\Codegen\AbstractClient;
+{{/queryParams.0}}{{#bodyParams.0}}{{^bodyParams.0.isPrimitiveType}}use {{invokerPackage}}\Model\{{bodyParams.0.baseType}};
+{{/bodyParams.0.isPrimitiveType}}{{/bodyParams.0}}{{#formParams.0}}{{^formParams.0.isPrimitiveType}}use {{invokerPackage}}\Model\{{formParams.0.baseType}};
+{{/formParams.0.isPrimitiveType}}{{/formParams.0}}{{/operation}}{{/operations}}{{/apiInfo.apis}}use Elastic\OpenApi\Codegen\AbstractClient;
 
 {{#clientClassQualifier}}{{{.}}} {{/clientClassQualifier}}class {{clientClass}} extends AbstractClient
 {{=<% %>=}}{<%#apiInfo%><%={{ }}=%>{{#apis}}{{#operations}}{{#operation}}
@@ -26,13 +27,15 @@ namespace {{invokerPackage}};
      * @return array<mixed>
      */
     {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}
-        {{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}},{{/hasMore}}{{/pathParams}}{{#pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}
-    {{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}}{{#queryParams.0}}{{#pathParams.0}},{{/pathParams.0}}
-        ?{{operationIdCamelCase}}Query $query = null{{^bodyParams.0}}
-    {{/bodyParams.0}}{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}},{{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}
-        {{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}
-    {{/bodyParams.0}}): array{{^pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}
-   {{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}} {
+        {{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}},{{/hasMore}}{{/pathParams}}{{#pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}{{^formParams.0}}
+    {{/formParams.0}}{{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}}{{#queryParams.0}}{{#pathParams.0}},{{/pathParams.0}}
+        ?{{operationIdCamelCase}}Query $query = null{{^bodyParams.0}}{{^formParams.0}}
+    {{/formParams.0}}{{/bodyParams.0}}{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}},{{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}
+        {{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}{{^formParams.0}}
+    {{/formParams.0}}{{/bodyParams.0}}{{#formParams.0}}{{#pathParams.0}},{{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}{{#bodyParams.0}}{{^queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}{{/bodyParams.0}}
+        {{^formParams.0.required}}?{{/formParams.0.required}}{{formParams.0.baseType}} $form{{^formParams.0.required}} = null{{/formParams.0.required}}
+    {{/formParams.0}}): array{{^pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}{{^formParams.0}}
+    {{/formParams.0}}{{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}} {
         {{#pathParams.0}}
         $path = [
             {{#pathParams}}
@@ -47,7 +50,8 @@ namespace {{invokerPackage}};
                 ->setParams($path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}
                 ->setParams($query ? $query->toArray() : []){{/queryParams.0}}{{/pathParams.0}}{{#pathParams.0}}{{#queryParams.0}}
                 ->setParams($path + ($query ? $query->toArray() : [])){{/queryParams.0}}{{/pathParams.0}}{{#bodyParams.0}}
-                ->setBody({{#bodyParams.0.required}}$body->toArray(){{/bodyParams.0.required}}{{^bodyParams.0.required}}$body ? $body->toArray() : []{{/bodyParams.0.required}}){{/bodyParams.0}}
+                ->setBody({{#bodyParams.0.required}}$body->toArray(){{/bodyParams.0.required}}{{^bodyParams.0.required}}$body ? $body->toArray() : []{{/bodyParams.0.required}}){{/bodyParams.0}}{{#formParams.0}}
+                ->setFormData({{#formParams.0.required}}$form->toArray(){{/formParams.0.required}}{{^formParams.0.required}}$form ? $form->toArray() : []{{/formParams.0.required}}){{/formParams.0}}
         );
     }
 {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}}}

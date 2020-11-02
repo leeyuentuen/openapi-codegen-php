@@ -103,9 +103,12 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
   @Override
   @SuppressWarnings("rawtypes")
   public String getTypeDeclaration(Schema p) {
-    if (ModelUtils.isArraySchema(p) || ModelUtils.isMapSchema(p)) {
-      return "array";
-    } else if (ModelUtils.isObjectSchema(p) || ModelUtils.isModel(p) || StringUtils.isNotBlank(p.get$ref())) {
+    if (ModelUtils.isArraySchema(p)
+        || ModelUtils.isMapSchema(p)
+        || ModelUtils.isObjectSchema(p)
+        || ModelUtils.isModel(p)
+        || StringUtils.isNotBlank(p.get$ref())
+    ) {
       return "array";
     }
 
@@ -128,84 +131,117 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
     Paths paths = openAPI.getPaths();
 
     Components components = openAPI.getComponents();
-    Map<String, Schema> schemas = components.getSchemas();
-    Map<String, RequestBody> requestBodies = openAPI.getComponents().getRequestBodies();
 
     for (String pathName : paths.keySet()) {
         PathItem pathItem = paths.get(pathName);
         Map<HttpMethod, Operation>  operations = pathItem.readOperationsMap();
         for(HttpMethod method: operations.keySet()) {
             Operation operation = operations.get(method);
+
+            if (operation.getOperationId() == null) {
+                operation.setOperationId(getOrGenerateOperationId(operation, pathName, method.toString().toLowerCase()));
+            }
+
             if (operation.getParameters() != null) {
-                List<Parameter> queryParameters = operation.getParameters()
-                .stream()
-                .filter(parameter -> parameter.getIn() == "query")
-                .collect(Collectors.toList());
-
-                if (! queryParameters.isEmpty()) {
-                    if (operation.getOperationId() == null) {
-                        operation.setOperationId(getOrGenerateOperationId(operation, pathName, method.toString().toLowerCase()));
-                    }
-
-                    String queryName = operation.getOperationId() + "Query";
-
-                    Map<String, Schema> querySchemas = queryParameters
-                                    .stream()
-                                    // Don't camelize query parameters
-                                    // https://test.net/api?vlan_id=3915 vs https://test.net/api?vlanId=3915
-//                                     .map(parameter -> {
-//                                         parameter.setName(org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true));
-//
-//                                         return parameter;
-//                                     })
-                                    .collect(Collectors.toMap(Parameter::getName, Parameter::getSchema));
-
-                    List<String> requiredParameters = queryParameters
-                        .stream()
-                        .filter(parameter -> !(parameter.getRequired() == null || parameter.getRequired() == false))
-                        .map(parameter -> parameter.getName())
-                        // see above
-//                         .map(parameter -> org.openapitools.codegen.utils.StringUtils.camelize(parameter.getName(), true))
-                        .collect(Collectors.toList());
-
-                    ObjectSchema querySchema = new ObjectSchema();
-                    querySchema.setProperties(querySchemas);
-                    querySchema.setRequired(requiredParameters);
-
-                    components.addSchemas(queryName, querySchema);
-                }
+                this.createSchemaFromParameters(operation, components, "query");
             }
 
-            RequestBody requestBody = operation.getRequestBody();
-
-            if (requestBody == null) {
-                continue;
+            if (operation.getRequestBody() != null) {
+                this.createSchemaFromRequestBody(operation, components);
             }
-
-            String requestBodyRef = requestBody.get$ref();
-
-            if (requestBodyRef == null) {
-                continue;
-            }
-
-            String simpleRef = ModelUtils.getSimpleRef(requestBodyRef);
-            String newSimpleRef = operation.getOperationId() + "Body";
-            String newRequestBodyRef = requestBodyRef.replace(simpleRef, newSimpleRef);
-            String newSchemaRef = newRequestBodyRef.replace("requestBodies", "schemas");
-
-            Schema schema = schemas.get(simpleRef);
-            schemas.remove(simpleRef);
-            schemas.put(newSimpleRef, schema);
-
-            RequestBody componentRequestBody = requestBodies.get(simpleRef);
-            requestBodies.remove(simpleRef);
-            requestBodies.put(newSimpleRef, componentRequestBody);
-
-            ModelUtils.getSchemaFromRequestBody(componentRequestBody).set$ref(newSchemaRef);
-
-            requestBody.set$ref(newRequestBodyRef);
         }
     }
+  }
+
+  @Override
+  public List<CodegenParameter> fromRequestBodyToFormParameters(RequestBody body, Set<String> imports) {
+        List<CodegenParameter> parameters = new ArrayList<CodegenParameter>();
+
+        CodegenParameter parameter = CodegenModelFactory.newInstance(CodegenModelType.PARAMETER);
+        parameter.baseType = body.getDescription();
+
+        if (body.getRequired() != null) {
+            parameter.required = body.getRequired();
+        }
+
+        parameters.add(parameter);
+
+        return parameters;
+  }
+
+  private void createSchemaFromParameters(Operation operation, Components components, String inType) {
+    List<Parameter> typeParameters = operation.getParameters()
+        .stream()
+        .filter(parameter -> parameter.getIn() == inType)
+        .collect(Collectors.toList());
+
+        if (! typeParameters.isEmpty()) {
+            String typeName = operation.getOperationId() + org.openapitools.codegen.utils.StringUtils.camelize(inType);
+
+            Map<String, Schema> typeSchemas = typeParameters
+                .stream()
+                .collect(Collectors.toMap(Parameter::getName, Parameter::getSchema));
+
+            List<String> requiredParameters = typeParameters
+                .stream()
+                .filter(parameter -> !(parameter.getRequired() == null || parameter.getRequired() == false))
+                .map(parameter -> parameter.getName())
+                .collect(Collectors.toList());
+
+            ObjectSchema typeSchema = new ObjectSchema();
+            typeSchema.setProperties(typeSchemas);
+            typeSchema.setRequired(requiredParameters);
+
+            components.addSchemas(typeName, typeSchema);
+        }
+  }
+
+  private void createSchemaFromRequestBody(Operation operation, Components components) {
+    if (operation.getRequestBody() == null) {
+        return;
+    }
+
+    if (operation.getRequestBody().get$ref() != null) {
+        this.createSchemaFromRefRequestBody(operation, components);
+
+        return;
+    }
+
+    this.createSchemaFromFormData(operation, components);
+  }
+
+  private void createSchemaFromRefRequestBody(Operation operation, Components components) {
+    Map<String, Schema> schemas = components.getSchemas();
+    Map<String, RequestBody> requestBodies = components.getRequestBodies();
+    RequestBody requestBody = operation.getRequestBody();
+
+    String shortRef = ModelUtils.getSimpleRef(requestBody.get$ref());
+    String newShortRef = operation.getOperationId() + "Body";
+
+    // change the name in schemas
+    Schema schema = schemas.get(shortRef);
+    schemas.remove(shortRef);
+    components.addSchemas(newShortRef, schema);
+
+    // change the name in the requestBodies
+    RequestBody componentRequestBody = requestBodies.get(shortRef);
+    requestBodies.remove(shortRef);
+    components.addRequestBodies(newShortRef, componentRequestBody);
+
+    ModelUtils.getSchemaFromRequestBody(componentRequestBody).set$ref(newShortRef);
+    requestBody.set$ref(newShortRef);
+  }
+
+  private void createSchemaFromFormData(Operation operation, Components components) {
+    RequestBody requestBody = operation.getRequestBody();
+    Schema schema = ModelUtils.getSchemaFromRequestBody(requestBody);
+    String ref = operation.getOperationId() + "Body";
+
+    // add new schema
+    components.addSchemas(ref, schema);
+    components.addRequestBodies(ref, requestBody);
+    requestBody.set$ref(ref);
+    requestBody.setDescription(org.openapitools.codegen.utils.StringUtils.camelize(ref));
   }
 
   @Override

@@ -41,6 +41,13 @@ interface EndpointInterface
     public function body() : ?array;
 
     /**
+     * FormData content for the current endpoint.
+     *
+     * @return array<mixed>|null
+     */
+    public function formData() : ?array;
+
+    /**
      * Set body data for the endpoint.
      *
      * @param array<mixed>|null $body
@@ -48,6 +55,15 @@ interface EndpointInterface
      * @return static
      */
     public function setBody(?array $body);
+
+    /**
+     * Set body data for the endpoint.
+     *
+     * @param array<mixed>|null $formData
+     *
+     * @return static
+     */
+    public function setFormData(?array $formData);
 
     /**
      * Set params data for the endpoint.

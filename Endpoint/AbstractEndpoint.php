@@ -28,6 +28,8 @@ abstract class AbstractEndpoint implements EndpointInterface
     protected array $params = [];
     /** @var array<string>|null  */
     protected ?array $body = null;
+    /** @var array<string>|null  */
+    protected ?array $formData = null;
 
     public function method() : string
     {
@@ -77,6 +79,24 @@ abstract class AbstractEndpoint implements EndpointInterface
     public function setBody(?array $body)
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function formData() : ?array
+    {
+        return $this->formData;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFormData(?array $formData)
+    {
+        $this->formData = $formData;
 
         return $this;
     }

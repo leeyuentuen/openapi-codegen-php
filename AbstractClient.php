@@ -108,6 +108,7 @@ abstract class AbstractClient
 
         $params = $endpoint->params();
         $body = $endpoint->body();
+        $formData = $endpoint->formData();
 
         $options = [];
 
@@ -117,6 +118,10 @@ abstract class AbstractClient
 
         if (! empty($body)) {
             $options['json'] = $body;
+        }
+
+        if (! empty($formData)) {
+            $options['form_params'] = $formData;
         }
 
         return $options;
