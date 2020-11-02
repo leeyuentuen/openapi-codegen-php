@@ -35,7 +35,7 @@ namespace {{invokerPackage}};
     {{/formParams.0}}{{/bodyParams.0}}{{#formParams.0}}{{#pathParams.0}},{{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}{{#bodyParams.0}}{{^queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}{{/bodyParams.0}}
         {{^formParams.0.required}}?{{/formParams.0.required}}{{formParams.0.baseType}} $form{{^formParams.0.required}} = null{{/formParams.0.required}}
     {{/formParams.0}}): array{{^pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}{{^formParams.0}}
-    {{/formParams.0}}{{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}} {
+   {{/formParams.0}}{{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}} {
         {{#pathParams.0}}
         $path = [
             {{#pathParams}}
