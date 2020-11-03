@@ -169,10 +169,26 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
         return parameters;
   }
 
+  @Override
+  public String toApiImport(String name) {
+      return apiPackage() + "\\" + name;
+  }
+
+  @Override
+  public String toModelImport(String name) {
+      if ("".equals(modelPackage())) {
+          return name;
+      } else {
+          return modelPackage() + "\\" + name;
+      }
+  }
+
   private void createSchemaFromParameters(Operation operation, Components components, String inType) {
     List<Parameter> typeParameters = operation.getParameters()
         .stream()
-        .filter(parameter -> inType == "query" && parameter instanceof QueryParameter)
+        .filter(parameter -> (inType == "query" && parameter instanceof QueryParameter)
+            || parameter.getIn() == inType
+        )
         .collect(Collectors.toList());
 
         if (! typeParameters.isEmpty()) {

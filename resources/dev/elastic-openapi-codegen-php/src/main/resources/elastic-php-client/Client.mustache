@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace {{invokerPackage}};
 
-{{#apiInfo.apis}}{{#operations}}{{#operation}}{{#queryParams.0}}use {{invokerPackage}}\Model\{{operationIdCamelCase}}Query;
-{{/queryParams.0}}{{#bodyParams.0}}{{^bodyParams.0.isPrimitiveType}}use {{invokerPackage}}\Model\{{bodyParams.0.baseType}};
-{{/bodyParams.0.isPrimitiveType}}{{/bodyParams.0}}{{#formParams.0}}{{^formParams.0.isPrimitiveType}}use {{invokerPackage}}\Model\{{formParams.0.baseType}};
-{{/formParams.0.isPrimitiveType}}{{/formParams.0}}{{/operation}}{{/operations}}{{/apiInfo.apis}}use Elastic\OpenApi\Codegen\AbstractClient;
+{{#models}}{{#model}}use {{importPath}};
+{{/model}}{{/models}}use Elastic\OpenApi\Codegen\AbstractClient;
 
 {{#clientClassQualifier}}{{{.}}} {{/clientClassQualifier}}class {{clientClass}} extends AbstractClient
 {{=<% %>=}}{<%#apiInfo%><%={{ }}=%>{{#apis}}{{#operations}}{{#operation}}
