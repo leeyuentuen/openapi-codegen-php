@@ -172,7 +172,7 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
   private void createSchemaFromParameters(Operation operation, Components components, String inType) {
     List<Parameter> typeParameters = operation.getParameters()
         .stream()
-        .filter(parameter -> parameter instanceof QueryParameter)
+        .filter(parameter -> inType == "query" && parameter instanceof QueryParameter)
         .collect(Collectors.toList());
 
         if (! typeParameters.isEmpty()) {
