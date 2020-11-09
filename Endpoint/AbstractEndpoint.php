@@ -157,31 +157,11 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     private function processParams(array $params) : array
     {
-        $params = array_filter(
+        return array_filter(
             $params,
             static function ($param) {
                 return $param !== null;
             }
         );
-
-        foreach ($params as $key => $value) {
-            $keyPath = explode('.', $key);
-            if (count($keyPath) <= 1) {
-                continue;
-            }
-
-            $suffix = implode('.', array_slice($keyPath, 1));
-            $value = $this->processParams([$suffix => $value]);
-
-            if (! isset($params[$keyPath[0]])) {
-                $params[$keyPath[0]] = [];
-            }
-
-            $params[$keyPath[0]] = array_merge_recursive($params[$keyPath[0]], $value);
-
-            unset($params[$key]);
-        }
-
-        return $params;
     }
 }
