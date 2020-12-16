@@ -17,16 +17,14 @@
     "php" : "^7.4",
     "psr/log" : "^1.0.",
     "guzzlehttp/guzzle": "^6.5",
-    "event-engine/php-data": "2.0-beta.4"
+    "event-engine/php-data": "2.0-beta.5"
   },
   "require-dev" : {
     "phpunit/phpunit" : "^5.6.0|^6.3.0",
     "squizlabs/php_codesniffer" : "^3.4.0",
-    "friendsofphp/php-cs-fixer": "^2.14",
     "overtrue/phplint": "^1.1",
-    "phpmd/phpmd": "^2.6",
     "combell/platforms-php-coding-standard": "dev-php7.4",
-    "phpro/grumphp": "^0.18.0",
+    "phpro/grumphp": "^0.19.0",
     "phpstan/phpstan": "^0.12.13"
   },
   "repositories": [
