@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace {{modelPackage}};
 
-use EventEngine\Data\ImmutableRecord;
-use EventEngine\Data\ImmutableRecordLogic;
+use ADS\JsonImmutableObjects\JsonSchemaAwareRecordLogic;
+use EventEngine\Data\JsonSchemaAwareRecord;
 
 {{#model}}
-final class {{classname}} implements ImmutableRecord
+final class {{classname}} implements JsonSchemaAwareRecord
 {
-    use ImmutableRecordLogic;
+    use JsonSchemaAwareRecordLogic;
 
 // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
