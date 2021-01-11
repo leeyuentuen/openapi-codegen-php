@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace {{modelPackage}};
 
 use ADS\JsonImmutableObjects\JsonSchemaAwareRecordLogic;
-use EventEngine\Data\JsonSchemaAwareRecord;
+use EventEngine\JsonSchema\JsonSchemaAwareRecord;
 
 {{#model}}
 final class {{classname}} implements JsonSchemaAwareRecord
