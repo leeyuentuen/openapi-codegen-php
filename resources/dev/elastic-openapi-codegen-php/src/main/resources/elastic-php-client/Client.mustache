@@ -32,7 +32,7 @@ namespace {{invokerPackage}};
         {{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}{{^formParams.0}}
     {{/formParams.0}}{{/bodyParams.0}}{{#formParams.0}}{{#pathParams.0}},{{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}{{#bodyParams.0}}{{^queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}{{/bodyParams.0}}
         {{^formParams.0.required}}?{{/formParams.0.required}}{{formParams.0.baseType}} $form{{^formParams.0.required}} = null{{/formParams.0.required}}
-    {{/formParams.0}}): array{{^pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}{{^formParams.0}}
+    {{/formParams.0}}): {{#responses.0.primitiveType}}array{{/responses.0.primitiveType}}{{#responses.0.isListContainer}}array{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}{{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}{{^formParams.0}}
    {{/formParams.0}}{{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}} {
         {{#pathParams.0}}
         $path = [
@@ -42,7 +42,7 @@ namespace {{invokerPackage}};
         ];
 
         {{/pathParams.0}}
-        return $this->performRequest(
+        $response = $this->performRequest(
             $this
                 ->endpoint('{{classname}}'){{#pathParams.0}}{{^queryParams.0}}
                 ->setParams($path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}
@@ -51,5 +51,10 @@ namespace {{invokerPackage}};
                 ->setBody({{^bodyParams.0.required}}$body ? {{/bodyParams.0.required}}{{#bodyParams.0.isFreeFormObject}}(array) $body{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isFreeFormObject}}$body->toArray(){{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.required}} : []{{/bodyParams.0.required}}){{/bodyParams.0}}{{#formParams.0}}
                 ->setFormData({{#formParams.0.required}}$form->toArray(){{/formParams.0.required}}{{^formParams.0.required}}$form ? $form->toArray() : []{{/formParams.0.required}}){{/formParams.0}}
         );
+
+        return {{#responses.0.isListContainer}}{{^responses.0.primitiveType}}array_map(
+            static fn (array $responseItem) => {{responses.0.baseType}}::fromArray($response),
+            $response
+        ){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}::fromArray($response){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{#responses.0.primitiveType}}$response{{/responses.0.primitiveType}};
     }
 {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}}}
