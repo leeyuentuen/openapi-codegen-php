@@ -30,8 +30,8 @@ final class {{classname}} implements JsonSchemaAwareRecord
     private static function arrayPropItemTypeMap(): array
     {
         return [{{#vars}}{{#isListContainer}}
-            '{{baseName}}' => '{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}',{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
-            '{{baseName}}' => '{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}',{{/isListContainer}}{{/isContainer}}{{/vars}}
+            '{{baseName}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
+            '{{baseName}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/isListContainer}}{{/isContainer}}{{/vars}}
         ];
     }
 // phpcs:enable
