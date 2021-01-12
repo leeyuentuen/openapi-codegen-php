@@ -22,7 +22,7 @@ namespace {{invokerPackage}};
      * Documentation: {{url}}
      *
 {{/externalDocs}}
-     * @return {{#responses.0.primitiveType}}array<mixed>{{/responses.0.primitiveType}}{{#responses.0.isListContainer}}array<{{responses.0.baseType}}>{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}{{/responses.0.primitiveType}}{{/responses.0.isListContainer}}
+     * @return {{#responses.0.primitiveType}}array<mixed>{{/responses.0.primitiveType}}{{#responses.0.isListContainer}}{{^responses.0.primitiveType}}array<{{responses.0.baseType}}>{{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}{{/responses.0.primitiveType}}{{/responses.0.isListContainer}}
      */
     {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}
         {{dataType}} ${{paramName}}{{^required}} = {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}},{{/hasMore}}{{/pathParams}}{{#pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}{{^formParams.0}}
