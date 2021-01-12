@@ -25,3 +25,5 @@ docker run --rm -v ${rootdir}:/local ${generatorimage} generate -g elastic-php-c
                                                                -t /local/resources/api/templates
 
 sudo chown $USER:$USER -R ${rootdir}/Client.php ${rootdir}/Model ${rootdir}/Endpoint
+
+vendor/bin/phpcbf ${rootdir}/Client.php ${rootdir}/ClientBuilder.php ${rootdir}/Model ${rootdir}/Endpoint

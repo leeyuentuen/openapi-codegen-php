@@ -21,5 +21,18 @@ final class {{classname}} implements JsonSchemaAwareRecord
     /** @var {{dataType}}<mixed>{{^required}}|null{{/required}} */{{/isFreeFormObject}}
     private {{^required}}?{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}} ${{baseName}}{{^required}} = null{{/required}};
 {{/vars}}
+
+    /**
+    * @return array<string, string>
+    *
+    * @phpcsSuppress SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
+    */
+    private static function arrayPropItemTypeMap(): array
+    {
+        return [{{#vars}}{{#isListContainer}}
+            '{{baseName}}' => '{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}',{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
+            '{{baseName}}' => '{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}',{{/isListContainer}}{{/isContainer}}{{/vars}}
+        ];
+    }
 // phpcs:enable
 }{{/model}}{{/models}}
