@@ -17,7 +17,7 @@
     "php" : "^7.4",
     "psr/log" : "^1.0.",
     "guzzlehttp/guzzle": "^6.5",
-    "arnedesmedt/json-immutable-objects": "dev-master"
+    "arnedesmedt/json-immutable-objects": "^0.1"
   },
   "require-dev" : {
     "phpunit/phpunit" : "^5.6.0|^6.3.0",
