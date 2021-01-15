@@ -19,7 +19,16 @@ final class {{classname}} implements JsonSchemaAwareRecord
     /** @var {{dataType}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{^required}}|null{{/required}} */{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
     /** @var {{dataType}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{^required}}|null{{/required}} */{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}
     /** @var {{dataType}}<mixed>{{^required}}|null{{/required}} */{{/isFreeFormObject}}
-    private {{^required}}?{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}} ${{baseName}}{{^required}} = null{{/required}};
+    private {{^required}}?{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}} ${{name}}{{^required}} = null{{/required}};
+{{/vars}}
+{{#vars}}
+    /**
+    * @return {{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}{{#isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{#isContainer}}{{^isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}{{^isContainer}}{{^isListContainer}}<mixed>{{/isListContainer}}{{/isContainer}}{{/isFreeFormObject}}{{^required}}|null{{/required}}
+    */
+    public function {{name}}(): {{^required}}?{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}
+    {
+        return $this->{{name}};
+    }
 {{/vars}}
 
     /**
