@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{invokerPackage}};
 
+use Elastic\OpenApi\Codegen\Util\ArrayUtil;
 {{#models}}{{#model}}use {{importPath}};
 {{/model}}{{/models}}use Elastic\OpenApi\Codegen\AbstractClient;
 
@@ -48,12 +49,12 @@ namespace {{invokerPackage}};
                 ->setParams($path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}
                 ->setParams($query ? $query->toArray() : []){{/queryParams.0}}{{/pathParams.0}}{{#pathParams.0}}{{#queryParams.0}}
                 ->setParams($path + ($query ? $query->toArray() : [])){{/queryParams.0}}{{/pathParams.0}}{{#bodyParams.0}}
-                ->setBody({{^bodyParams.0.required}}$body ? {{/bodyParams.0.required}}{{#bodyParams.0.isFreeFormObject}}(array) $body{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isFreeFormObject}}array_filter($body->toArray(), static fn ($value) => $value !== null){{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.required}} : []{{/bodyParams.0.required}}){{/bodyParams.0}}{{#formParams.0}}
-                ->setFormData({{#formParams.0.required}}$form->toArray(){{/formParams.0.required}}{{^formParams.0.required}}$form ? array_filter($form->toArray(), static fn ($value) => $value !== null): []{{/formParams.0.required}}){{/formParams.0}}
+                ->setBody({{^bodyParams.0.required}}$body ? {{/bodyParams.0.required}}{{#bodyParams.0.isFreeFormObject}}(array) $body{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isFreeFormObject}}$body->toArray(){{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.required}} : []{{/bodyParams.0.required}}){{/bodyParams.0}}{{#formParams.0}}
+                ->setFormData({{#formParams.0.required}}$form->toArray(){{/formParams.0.required}}{{^formParams.0.required}}$form ? $form->toArray() : []{{/formParams.0.required}}){{/formParams.0}}
         );
 
         return {{#responses.0.isListContainer}}{{^responses.0.primitiveType}}array_map(
-            static fn (array $responseItem) => {{responses.0.baseType}}::fromArray($responseItem),
+            static fn (array $responseItem) => {{responses.0.baseType}}::fromArray(ArrayUtil::camelCasedKeys($responseItem)),
             $response
         ){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}::fromArray($response){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{#responses.0.primitiveType}}$response{{/responses.0.primitiveType}};
     }

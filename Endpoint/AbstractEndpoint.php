@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Elastic\OpenApi\Codegen\Endpoint;
 
+use Elastic\OpenApi\Codegen\Util\ArrayUtil;
 use UnexpectedValueException;
 
 /**
@@ -31,12 +32,12 @@ abstract class AbstractEndpoint implements EndpointInterface
     /** @var array<string>|null  */
     protected ?array $formData = null;
 
-    public function method() : string
+    public function method(): string
     {
         return $this->method;
     }
 
-    public function uri() : string
+    public function uri(): string
     {
         $uri = $this->uri;
 
@@ -50,7 +51,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     /**
      * {@inheritdoc}
      */
-    public function params() : array
+    public function params(): array
     {
         $params = [];
 
@@ -62,15 +63,19 @@ abstract class AbstractEndpoint implements EndpointInterface
             $params[$paramName] = $paramVal;
         }
 
-        return $this->processParams($params);
+        return ArrayUtil::noNullItems($params);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function body() : ?array
+    public function body(): ?array
     {
-        return $this->body;
+        if ($this->body === null) {
+            return $this->body;
+        }
+
+        return ArrayUtil::noNullItems($this->body);
     }
 
     /**
@@ -86,9 +91,13 @@ abstract class AbstractEndpoint implements EndpointInterface
     /**
      * {@inheritdoc}
      */
-    public function formData() : ?array
+    public function formData(): ?array
     {
-        return $this->formData;
+        if ($this->formData === null) {
+            return $this->formData;
+        }
+
+        return ArrayUtil::noNullItems($this->formData);
     }
 
     /**
@@ -124,7 +133,7 @@ abstract class AbstractEndpoint implements EndpointInterface
      *
      * @throws UnexpectedValueException
      */
-    private function checkParams(?array $params) : void
+    private function checkParams(?array $params): void
     {
         if ($params === null) {
             return;
@@ -147,21 +156,6 @@ abstract class AbstractEndpoint implements EndpointInterface
 
         throw new UnexpectedValueException(
             sprintf($message, $invalidParams, $whitelist)
-        );
-    }
-
-    /**
-     * @param array<mixed> $params
-     *
-     * @return array<mixed>
-     */
-    private function processParams(array $params) : array
-    {
-        return array_filter(
-            $params,
-            static function ($param) {
-                return $param !== null;
-            }
         );
     }
 }
