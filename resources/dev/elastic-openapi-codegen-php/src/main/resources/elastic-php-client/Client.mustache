@@ -54,7 +54,7 @@ use Elastic\OpenApi\Codegen\Util\ArrayUtil;
         );
 
         return {{#responses.0.isListContainer}}{{^responses.0.primitiveType}}array_map(
-            static fn (array $responseItem) => {{responses.0.baseType}}::fromArray(ArrayUtil::camelCasedKeys($responseItem)),
+            static fn (array $responseItem) => {{responses.0.baseType}}::fromArray(ArrayUtil::camelCasedKeys($responseItem, true)),
             $response
         ){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}::fromArray($response){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{#responses.0.primitiveType}}$response{{/responses.0.primitiveType}};
     }
