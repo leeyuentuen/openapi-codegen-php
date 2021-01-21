@@ -16,26 +16,7 @@ final class ArrayUtil
      */
     public static function noNullItems(array $array, bool $recursive = true): array
     {
-        $filter = static fn ($value) => $value !== null;
-
-        return array_filter(
-            self::process(
-                $array,
-                null,
-                static function ($value) use ($filter) {
-                    if (is_array($value)) {
-                        $value = array_filter(
-                            $value,
-                            $filter
-                        );
-                    }
-
-                    return $value;
-                },
-                $recursive
-            ),
-            $filter
-        );
+        return self::recursiveFilterValues($array, static fn ($value) => $value !== null, $recursive);
     }
 
     /**
@@ -45,7 +26,7 @@ final class ArrayUtil
      */
     public static function camelCasedKeys(array $array, bool $recursive = false): array
     {
-        return self::process(
+        return self::recursiveMapKeysAndValues(
             $array,
             static fn ($key) => is_int($key) ? $key : StringUtil::camelize($key),
             null,
@@ -60,7 +41,7 @@ final class ArrayUtil
      */
     public static function snakeCasedKeys(array $array, bool $recursive = false): array
     {
-        return self::process(
+        return self::recursiveMapKeysAndValues(
             $array,
             static fn ($key) => is_int($key) ? $key : StringUtil::decamilize($key),
             null,
@@ -73,7 +54,7 @@ final class ArrayUtil
      *
      * @return array<int|string, mixed>
      */
-    private static function process(
+    private static function recursiveMapKeysAndValues(
         array $array,
         ?Closure $keyClosure = null,
         ?Closure $valueClosure = null,
@@ -90,7 +71,7 @@ final class ArrayUtil
                 }
 
                 if (is_array($value)) {
-                    $value = self::process($value, $keyClosure, $valueClosure, $recursive);
+                    $value = self::recursiveMapKeysAndValues($value, $keyClosure, $valueClosure, $recursive);
                 }
 
                 $value = $isStdClass ? (object) $value : $value;
@@ -100,5 +81,39 @@ final class ArrayUtil
         }
 
         return $processedArray;
+    }
+
+    /**
+     * @param array<int|string, mixed> $array
+     *
+     * @return array<int|string, mixed>
+     */
+    private static function recursiveFilterValues(
+        array $array,
+        Closure $filter,
+        bool $recursive
+    ): array {
+        if (! $recursive) {
+            return array_filter($array, $filter);
+        }
+
+        return array_filter(
+            self::recursiveMapKeysAndValues(
+                $array,
+                null,
+                static function ($value) use ($filter) {
+                    if (is_array($value)) {
+                        $value = array_filter(
+                            $value,
+                            $filter
+                        );
+                    }
+
+                    return $value;
+                },
+                $recursive
+            ),
+            $filter
+        );
     }
 }

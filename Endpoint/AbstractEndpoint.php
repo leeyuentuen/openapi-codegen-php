@@ -63,7 +63,7 @@ abstract class AbstractEndpoint implements EndpointInterface
             $params[$paramName] = $paramVal;
         }
 
-        return ArrayUtil::noNullItems($params);
+        return ArrayUtil::noNullItems($params, true);
     }
 
     /**
@@ -75,7 +75,7 @@ abstract class AbstractEndpoint implements EndpointInterface
             return $this->body;
         }
 
-        return ArrayUtil::noNullItems($this->body);
+        return ArrayUtil::noNullItems($this->body, true);
     }
 
     /**
@@ -97,7 +97,7 @@ abstract class AbstractEndpoint implements EndpointInterface
             return $this->formData;
         }
 
-        return ArrayUtil::noNullItems($this->formData);
+        return ArrayUtil::noNullItems($this->formData, true);
     }
 
     /**
