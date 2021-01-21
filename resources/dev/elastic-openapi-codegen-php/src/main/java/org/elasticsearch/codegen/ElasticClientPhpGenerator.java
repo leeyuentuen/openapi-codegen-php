@@ -13,6 +13,8 @@ import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.PathItem.HttpMethod;
+import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -149,6 +151,10 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
             if (operation.getRequestBody() != null) {
                 this.createSchemaFromRequestBody(operation, components);
             }
+
+            if (operation.getResponses() != null) {
+                this.sortResponses(operation);
+            }
         }
     }
   }
@@ -258,6 +264,16 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
     components.addRequestBodies(ref, requestBody);
     requestBody.set$ref(ref);
     requestBody.setDescription(org.openapitools.codegen.utils.StringUtils.camelize(ref));
+  }
+
+  private void sortResponses(Operation operation) {
+    ApiResponses responses = operation.getResponses();
+    Map<String, ApiResponse> sortedMap = new TreeMap<String, ApiResponse>(responses);
+
+    responses.clear();
+    for(String key : sortedMap.keySet()){
+        responses.addApiResponse(key, sortedMap.get(key));
+    }
   }
 
   @Override
