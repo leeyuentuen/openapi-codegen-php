@@ -14,11 +14,23 @@ final class ArrayUtil
      *
      * @return array<mixed>
      */
-    public static function noNullItems(array $array): array
+    public static function noNullItems(array $array, bool $recursive = true): array
     {
+        $filter = static fn ($value) => $value !== null;
+
         return array_filter(
-            $array,
-            static fn ($value) => $value !== null
+            self::process(
+                $array,
+                null,
+                static function ($array) use ($filter) {
+                    return array_filter(
+                        $array,
+                        $filter
+                    );
+                },
+                $recursive
+            ),
+            $filter
         );
     }
 
