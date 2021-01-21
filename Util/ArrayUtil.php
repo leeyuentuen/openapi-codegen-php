@@ -22,11 +22,15 @@ final class ArrayUtil
             self::process(
                 $array,
                 null,
-                static function ($array) use ($filter) {
-                    return array_filter(
-                        $array,
-                        $filter
-                    );
+                static function ($value) use ($filter) {
+                    if (is_array($value)) {
+                        $value = array_filter(
+                            $value,
+                            $filter
+                        );
+                    }
+
+                    return $value;
                 },
                 $recursive
             ),
