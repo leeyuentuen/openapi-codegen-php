@@ -22,7 +22,9 @@ use Elastic\OpenApi\Codegen\Util\ArrayUtil;
 {{#externalDocs}}
      * Documentation: {{url}}
      *
-{{/externalDocs}}
+{{/externalDocs}}{{#pathParams}}
+     * @param {{dataType}}{{#isListContainer}}<{{baseType}}>{{/isListContainer}}{{^required}}|null{{/required}} ${{paramName}}{{/pathParams}}
+     *
      * @return {{#responses.0.primitiveType}}array<mixed>{{/responses.0.primitiveType}}{{#responses.0.isListContainer}}{{^responses.0.primitiveType}}array<{{responses.0.baseType}}>{{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}{{/responses.0.primitiveType}}{{/responses.0.isListContainer}}
      */
     {{vendorExtensions.x-operation-scope}} function {{operationId}}({{#pathParams}}
