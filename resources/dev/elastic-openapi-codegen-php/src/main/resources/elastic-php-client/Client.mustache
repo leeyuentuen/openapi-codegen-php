@@ -51,7 +51,7 @@ use Elastic\OpenApi\Codegen\Util\ArrayUtil;
                 ->setParams($path){{/queryParams.0}}{{/pathParams.0}}{{^pathParams.0}}{{#queryParams.0}}
                 ->setParams($query ? $query->toArray() : []){{/queryParams.0}}{{/pathParams.0}}{{#pathParams.0}}{{#queryParams.0}}
                 ->setParams($path + ($query ? $query->toArray() : [])){{/queryParams.0}}{{/pathParams.0}}{{#bodyParams.0}}
-                ->setBody({{#bodyParams.0.isPrimitiveType}}[]{{/bodyParams.0.isPrimitiveType}}{{^bodyParams.0.isPrimitiveType}}{{^bodyParams.0.required}}$body ? {{/bodyParams.0.required}}{{#bodyParams.0.isFreeFormObject}}(array) $body{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isFreeFormObject}}$body->toArray(){{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.required}} : []{{/bodyParams.0.required}}{{/bodyParams.0.isPrimitiveType}}){{/bodyParams.0}}{{#formParams.0}}
+                ->setBody({{^bodyParams.0.required}}$body !== null ? {{/bodyParams.0.required}}{{#bodyParams.0.isPrimitiveType}}{{^bodyParams.0.isFreeFormObject}}[]{{/bodyParams.0.isFreeFormObject}}{{/bodyParams.0.isPrimitiveType}}{{#bodyParams.0.isFreeFormObject}}(array) $body{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isPrimitiveType}}$body->toArray(){{/bodyParams.0.isPrimitiveType}}{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.required}} : []{{/bodyParams.0.required}}){{/bodyParams.0}}{{#formParams.0}}
                 ->setFormData({{#formParams.0.required}}$form->toArray(){{/formParams.0.required}}{{^formParams.0.required}}$form ? $form->toArray() : []{{/formParams.0.required}}){{/formParams.0}}
         );
 
