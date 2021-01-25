@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Elastic\OpenApi\Codegen\Endpoint;
 
+use ADS\ValueObjects\ValueObject;
 use Elastic\OpenApi\Codegen\Util\ArrayUtil;
 use UnexpectedValueException;
 
@@ -53,17 +54,14 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     public function params(): array
     {
-        $params = [];
-
-        foreach ($this->params as $paramName => $paramVal) {
-            if (! in_array($paramName, $this->paramWhitelist)) {
-                continue;
-            }
-
-            $params[$paramName] = $paramVal;
-        }
-
-        return ArrayUtil::noNullItems($params, true);
+        return ArrayUtil::noNullItems(
+            array_filter(
+                $this->params,
+                fn (string $paramName) => in_array($paramName, $this->paramWhitelist),
+                ARRAY_FILTER_USE_KEY
+            ),
+            true
+        );
     }
 
     /**
@@ -71,11 +69,7 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     public function body(): ?array
     {
-        if ($this->body === null) {
-            return $this->body;
-        }
-
-        return ArrayUtil::noNullItems($this->body, true);
+        return $this->body;
     }
 
     /**
@@ -83,6 +77,10 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     public function setBody(?array $body)
     {
+        if ($body !== null) {
+            $body = ArrayUtil::noNullItems($body, true);
+        }
+
         $this->body = $body;
 
         return $this;
@@ -93,11 +91,7 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     public function formData(): ?array
     {
-        if ($this->formData === null) {
-            return $this->formData;
-        }
-
-        return ArrayUtil::noNullItems($this->formData, true);
+        return $this->formData;
     }
 
     /**
@@ -105,6 +99,10 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     public function setFormData(?array $formData)
     {
+        if ($formData !== null) {
+            $formData = ArrayUtil::noNullItems($formData, true);
+        }
+
         $this->formData = $formData;
 
         return $this;
@@ -115,11 +113,16 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     public function setParams(?array $params)
     {
-        $this->checkParams($params);
-
         if ($params === null) {
             return $this;
         }
+
+        $this->checkParams($params);
+
+        $params = array_map(
+            static fn ($paramValue) => $paramValue instanceof ValueObject ? $paramValue->toValue() : $paramValue,
+            $params
+        );
 
         $this->params = $params;
 
