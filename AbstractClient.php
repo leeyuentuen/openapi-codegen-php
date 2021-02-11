@@ -35,6 +35,8 @@ abstract class AbstractClient
     /** @var array<string, string> */
     protected array $customHeaders = [];
 
+    private ?string $prependPath = null;
+
     public function __construct(callable $endpointBuilder, Client $connection)
     {
         $this->endpointBuilder = $endpointBuilder;
@@ -57,6 +59,16 @@ abstract class AbstractClient
     public function setOptionBuilder(callable $optionBuilder)
     {
         $this->optionBuilder = $optionBuilder;
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function setPrependPath(string $prependPath)
+    {
+        $this->prependPath = $prependPath;
 
         return $this;
     }
@@ -86,7 +98,7 @@ abstract class AbstractClient
     protected function performRequest(Endpoint\EndpointInterface $endpoint)
     {
         $method = $endpoint->method();
-        $uri = $endpoint->uri();
+        $uri = $this->getUriFromEndpoint($endpoint);
 
         $options = $this->buildOptions($endpoint);
 
@@ -104,6 +116,16 @@ abstract class AbstractClient
         }
 
         return $body;
+    }
+
+    protected function getUriFromEndpoint(EndpointInterface $endpoint): string
+    {
+        $uri = $endpoint->uri();
+        if ($this->prependPath !== null) {
+            return $this->prependPath . $uri;
+        }
+
+        return $uri;
     }
 
     /**
