@@ -32,9 +32,6 @@ abstract class AbstractClient
     /** @var callable|null */
     protected $optionBuilder = null;
 
-    /** @var array<string, string> */
-    protected array $customHeaders = [];
-
     private ?string $prependPath = null;
 
     public function __construct(callable $endpointBuilder, Client $connection)
@@ -81,18 +78,6 @@ abstract class AbstractClient
     }
 
     /**
-     * @param array<string, string> $headers
-     *
-     * @return $this
-     */
-    public function addCustomHeader(array $headers)
-    {
-        $this->customHeaders = $headers;
-
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     protected function performRequest(Endpoint\EndpointInterface $endpoint)
@@ -133,38 +118,27 @@ abstract class AbstractClient
      */
     protected function buildOptions(Endpoint\EndpointInterface $endpoint): array
     {
+        $options = [];
         if ($this->optionBuilder) {
             $optionBuilder = $this->optionBuilder;
 
             $options = $optionBuilder($endpoint);
-
-            if ($options !== null) {
-                return $options;
-            }
         }
 
         $params = $endpoint->params();
         $body = $endpoint->body();
         $formData = $endpoint->formData();
 
-        $options = [];
-
-        if (! empty($params)) {
+        if (! empty($params) && ! empty($options['query'])) {
             $options['query'] = $params;
         }
 
-        if (! empty($body)) {
+        if (! empty($body) && ! empty($options['json'])) {
             $options['json'] = $body;
         }
 
-        if (! empty($formData)) {
+        if (! empty($formData) && ! empty($options['form_params'])) {
             $options['form_params'] = $formData;
-        }
-
-        if (count($this->customHeaders) > 0) {
-            $options['headers'] = $this->customHeaders;
-
-            $this->customHeaders = [];
         }
 
         return $options;
