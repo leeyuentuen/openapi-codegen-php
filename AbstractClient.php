@@ -129,15 +129,15 @@ abstract class AbstractClient
         $body = $endpoint->body();
         $formData = $endpoint->formData();
 
-        if (! empty($params) && ! empty($options['query'])) {
+        if (! array_key_exists('query', $options) && count($params) > 0) {
             $options['query'] = $params;
         }
 
-        if (! empty($body) && ! empty($options['json'])) {
+        if (! array_key_exists('json', $options) && is_array($body) && count($body) > 0) {
             $options['json'] = $body;
         }
 
-        if (! empty($formData) && ! empty($options['form_params'])) {
+        if (! array_key_exists('form_params', $options) && is_array($formData) && count($formData) > 0) {
             $options['form_params'] = $formData;
         }
 
