@@ -32,6 +32,8 @@ abstract class AbstractClient
     /** @var callable|null */
     protected $optionBuilder = null;
 
+    private ?string $prependPath = null;
+
     public function __construct(callable $endpointBuilder, Client $connection)
     {
         $this->endpointBuilder = $endpointBuilder;
@@ -58,7 +60,17 @@ abstract class AbstractClient
         return $this;
     }
 
-    protected function endpoint(string $name) : EndpointInterface
+    /**
+     * @return static
+     */
+    public function setPrependPath(string $prependPath)
+    {
+        $this->prependPath = $prependPath;
+
+        return $this;
+    }
+
+    protected function endpoint(string $name): EndpointInterface
     {
         $endpointBuilder = $this->endpointBuilder;
 
@@ -71,7 +83,7 @@ abstract class AbstractClient
     protected function performRequest(Endpoint\EndpointInterface $endpoint)
     {
         $method = $endpoint->method();
-        $uri = $endpoint->uri();
+        $uri = $this->uriWithPrependPath($endpoint);
 
         $options = $this->buildOptions($endpoint);
 
@@ -91,36 +103,41 @@ abstract class AbstractClient
         return $body;
     }
 
+    protected function uriWithPrependPath(EndpointInterface $endpoint): string
+    {
+        $uri = $endpoint->uri();
+        if ($this->prependPath !== null) {
+            return $this->prependPath . $uri;
+        }
+
+        return $uri;
+    }
+
     /**
      * @return array<mixed>
      */
-    protected function buildOptions(Endpoint\EndpointInterface $endpoint) : array
+    protected function buildOptions(Endpoint\EndpointInterface $endpoint): array
     {
+        $options = [];
         if ($this->optionBuilder) {
             $optionBuilder = $this->optionBuilder;
 
             $options = $optionBuilder($endpoint);
-
-            if ($options !== null) {
-                return $options;
-            }
         }
 
         $params = $endpoint->params();
         $body = $endpoint->body();
         $formData = $endpoint->formData();
 
-        $options = [];
-
-        if (! empty($params)) {
+        if (! array_key_exists('query', $options) && count($params) > 0) {
             $options['query'] = $params;
         }
 
-        if (! empty($body)) {
+        if (! array_key_exists('json', $options) && is_array($body) && count($body) > 0) {
             $options['json'] = $body;
         }
 
-        if (! empty($formData)) {
+        if (! array_key_exists('form_params', $options) && is_array($formData) && count($formData) > 0) {
             $options['form_params'] = $formData;
         }
 
