@@ -83,7 +83,7 @@ abstract class AbstractClient
     protected function performRequest(Endpoint\EndpointInterface $endpoint)
     {
         $method = $endpoint->method();
-        $uri = $this->getUriFromEndpoint($endpoint);
+        $uri = $this->uriWithPrependPath($endpoint);
 
         $options = $this->buildOptions($endpoint);
 
@@ -103,7 +103,7 @@ abstract class AbstractClient
         return $body;
     }
 
-    protected function getUriFromEndpoint(EndpointInterface $endpoint): string
+    protected function uriWithPrependPath(EndpointInterface $endpoint): string
     {
         $uri = $endpoint->uri();
         if ($this->prependPath !== null) {
