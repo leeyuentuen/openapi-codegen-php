@@ -100,6 +100,9 @@ abstract class AbstractClient
             return [];
         }
 
+        // Remove HAL metadata
+        unset($body['_links']);
+
         return $body;
     }
 
