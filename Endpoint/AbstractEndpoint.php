@@ -32,6 +32,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     protected ?array $body = null;
     /** @var array<string>|null  */
     protected ?array $formData = null;
+    protected bool $snakeCasedParams = false;
 
     public function method(): string
     {
@@ -117,6 +118,11 @@ abstract class AbstractEndpoint implements EndpointInterface
             return $this;
         }
 
+        if ($this->snakeCasedParams) {
+            /** @var array<string, mixed> $params */
+            $params = ArrayUtil::snakeCasedKeys($params);
+        }
+
         $this->checkParams($params);
 
         $params = array_map(
@@ -160,5 +166,15 @@ abstract class AbstractEndpoint implements EndpointInterface
         throw new UnexpectedValueException(
             sprintf($message, $invalidParams, $whitelist)
         );
+    }
+
+    /**
+     * @return static
+     */
+    public function setSnakeCasedParams(bool $snakeCasedParams)
+    {
+        $this->snakeCasedParams = $snakeCasedParams;
+
+        return $this;
     }
 }

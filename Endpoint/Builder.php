@@ -17,19 +17,22 @@ namespace Elastic\OpenApi\Codegen\Endpoint;
 class Builder
 {
     private string $namespace;
+    private bool $snakeCasedParams;
 
-    public function __construct(string $namespace)
+    public function __construct(string $namespace, bool $snakeCasedParams = false)
     {
         $this->namespace = $namespace;
+        $this->snakeCasedParams = $snakeCasedParams;
     }
 
     /**
      * Create an endpoint from name.
      */
-    public function __invoke(string $endpointName) : EndpointInterface
+    public function __invoke(string $endpointName): EndpointInterface
     {
         $className = sprintf('%s\\%s', $this->namespace, $endpointName);
 
-        return new $className();
+        return (new $className())
+            ->setSnakeCasedParams($this->snakeCasedParams);
     }
 }
