@@ -16,14 +16,14 @@ generatordir=$(cd $(dirname $argv0) > /dev/null && cd $generatordir > /dev/null 
 generatorimage=elastic/elastic-openapi-codegen-php
 rootdir=`cd $(dirname $argv0)/../..; pwd`
 
-cd ${generatordir} && docker build --target runner -t ${generatorimage} elastic-openapi-codegen-php
+cd "${generatordir}" && docker build --target runner -t ${generatorimage} elastic-openapi-codegen-php
 
-docker run --rm -v ${rootdir}:/local ${generatorimage} generate -g elastic-php-client \
+docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php-client \
                                                                -i /local/resources/api/api-spec.yml \
                                                                -o /local/ \
                                                                -c /local/resources/api/config.json \
                                                                -t /local/resources/api/templates
 
-sudo chown $USER:$USER -R ${rootdir}/Client.php ${rootdir}/Model ${rootdir}/Endpoint
+cd "${rootdir}" && sudo chown -R $USER:$GROUP Client.php Model Endpoint
 
-cd ${rootdir} && vendor/bin/phpcbf --extensions=php --report=full ./Client.php ./ClientBuilder.php Model/ Endpoint/
+cd "${rootdir}" && vendor/bin/phpcbf --extensions=php --report=full ./Client.php ./ClientBuilder.php Model/ Endpoint/
