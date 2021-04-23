@@ -24,6 +24,6 @@ docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php
                                                                -c /local/resources/api/config.json \
                                                                -t /local/resources/api/templates
 
-cd "${rootdir}" && sudo chown -R $USER:$GROUP Client.php Model Endpoint
+cd "${rootdir}" && sudo chown -R $(id -u):$(id -g) Client.php Model Endpoint
 
 cd "${rootdir}" && vendor/bin/phpcbf --extensions=php --report=full ./Client.php ./ClientBuilder.php Model/ Endpoint/
