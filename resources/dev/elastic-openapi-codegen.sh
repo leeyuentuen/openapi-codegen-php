@@ -26,4 +26,5 @@ docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php
 
 cd "${rootdir}" && sudo chown -R $(id -u):$(id -g) Client.php Model Endpoint
 
-cd "${rootdir}" && vendor/bin/phpcbf --extensions=php --report=full ./Client.php ./ClientBuilder.php Model/ Endpoint/
+# Exit code of phpcbf is 1 if all is fixed https://github.com/squizlabs/PHP_CodeSniffer/issues/2898
+cd "${rootdir}" && (vendor/bin/phpcbf --extensions=php --report=full ./Client.php ./ClientBuilder.php Model/ Endpoint/ || true)
