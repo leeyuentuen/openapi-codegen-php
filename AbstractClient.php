@@ -15,6 +15,8 @@ use Elastic\OpenApi\Codegen\Endpoint\EndpointInterface;
 use Elastic\OpenApi\Codegen\Exception\ExceptionHandler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 
 /**
  * A base client implementation implemented by the generator.
@@ -33,6 +35,7 @@ abstract class AbstractClient
     protected $optionBuilder = null;
 
     private ?string $prependPath = null;
+    private ?ResponseInterface $lastResponse = null;
 
     public function __construct(callable $endpointBuilder, Client $connection)
     {
@@ -93,6 +96,8 @@ abstract class AbstractClient
             throw ExceptionHandler::fromGuzzleClientException($exception, $this->exceptionHandler);
         }
 
+        $this->lastResponse = $response;
+
         $contents = $response->getBody()->getContents();
         $body = json_decode($contents, true);
 
@@ -145,5 +150,21 @@ abstract class AbstractClient
         }
 
         return $options;
+    }
+
+    public function lastResponse(): ResponseInterface
+    {
+        if ($this->lastResponse === null) {
+            throw new RuntimeException('No last response found.');
+        }
+
+        return $this->lastResponse;
+    }
+
+    public function lastStatusCode(): int
+    {
+        $lastResponse = $this->lastResponse();
+
+        return $lastResponse->getStatusCode();
     }
 }
