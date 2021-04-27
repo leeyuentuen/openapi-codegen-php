@@ -291,4 +291,9 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
 
     apiTemplateFiles.put("api.mustache", ".php");
   }
+
+  @Override
+  public String toEnumDefaultValue(String value, String datatype) {
+    return value;
+  }
 }
