@@ -19,7 +19,7 @@ final class {{classname}} implements JsonSchemaAwareRecord
     /** @var {{dataType}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
     /** @var {{dataType}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}
     /** @var {{dataType}}<mixed>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isFreeFormObject}}
-    private {{#isNullable}}?{{/isNullable}}{{^required}}{{^isNullable}}?{{/isNullable}}{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}} ${{name}}{{#isNullable}}{{^defaultValue}} = null{{/defaultValue}}{{/isNullable}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{^required}}{{^isNullable}} = null{{/isNullable}}{{/required}};
+    private {{#isNullable}}?{{/isNullable}}{{^required}}{{^isNullable}}?{{/isNullable}}{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}} ${{name}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{^defaultValue}}{{#isNullable}} = null{{/isNullable}}{{^required}}{{^isNullable}} = null{{/isNullable}}{{/required}}{{/defaultValue}};
 {{/vars}}
 {{#vars}}
     /**
