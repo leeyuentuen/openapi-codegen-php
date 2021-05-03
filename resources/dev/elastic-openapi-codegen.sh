@@ -18,13 +18,23 @@ rootdir=`cd $(dirname $argv0)/../..; pwd`
 
 cd "${generatordir}" && docker build --target runner -t ${generatorimage} elastic-openapi-codegen-php
 
+if [ -x "${rootdir}/resources/scripts/before_run.sh" ]
+then
+  "${rootdir}"/resources/scripts/before_run.sh
+fi
+
 docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php-client \
                                                                -i /local/resources/api/api-spec.yml \
                                                                -o /local/ \
                                                                -c /local/resources/api/config.json \
                                                                -t /local/resources/api/templates
 
-cd "${rootdir}" && sudo chown -R $(id -u):$(id -g) Client.php Model Endpoint
+cd "${rootdir}" && sudo chown -R "$(id -u):$(id -g)" Client.php Model Endpoint
+
+if [ -x "${rootdir}/resources/scripts/after_run.sh" ]
+then
+  "${rootdir}"/resources/scripts/after_run.sh
+fi
 
 # Exit code of phpcbf is 1 if all is fixed https://github.com/squizlabs/PHP_CodeSniffer/issues/2898
 cd "${rootdir}" && (vendor/bin/phpcbf --extensions=php --report=full ./Client.php ./ClientBuilder.php Model/ Endpoint/ || true)
