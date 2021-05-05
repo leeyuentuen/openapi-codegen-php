@@ -141,11 +141,11 @@ abstract class AbstractClient
             $options['query'] = $params;
         }
 
-        if (! array_key_exists('json', $options) && is_array($body) && count($body) > 0) {
+        if (! array_key_exists('json', $options) && is_array($body)) {
             $options['json'] = $body;
         }
 
-        if (! array_key_exists('form_params', $options) && is_array($formData) && count($formData) > 0) {
+        if (! array_key_exists('form_params', $options) && is_array($formData)) {
             $options['form_params'] = $formData;
         }
 
