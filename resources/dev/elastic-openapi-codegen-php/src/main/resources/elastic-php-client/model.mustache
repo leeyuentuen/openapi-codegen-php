@@ -25,7 +25,7 @@ final class {{classname}} implements JsonSchemaAwareRecord
     /**
     * @return {{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}{{#isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{#isContainer}}{{^isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}{{^isContainer}}{{^isListContainer}}<mixed>{{/isListContainer}}{{/isContainer}}{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}}
     */
-    public function {{name}}(): {{#isNullable}}?{{/isNullable}}{{^required}}{{^isNullable}}?{{/isNullable}}{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}
+    public function {{getter}}(): {{#isNullable}}?{{/isNullable}}{{^required}}{{^isNullable}}?{{/isNullable}}{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}
     {
         return $this->{{name}};
     }

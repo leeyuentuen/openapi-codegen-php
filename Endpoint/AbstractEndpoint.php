@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Elastic\OpenApi\Codegen\Endpoint;
 
+use ADS\Util\ArrayUtil;
 use ADS\ValueObjects\ValueObject;
-use Elastic\OpenApi\Codegen\Util\ArrayUtil;
 use UnexpectedValueException;
 
 /**
@@ -60,8 +60,7 @@ abstract class AbstractEndpoint implements EndpointInterface
                 $this->params,
                 fn (string $paramName) => in_array($paramName, $this->paramWhitelist),
                 ARRAY_FILTER_USE_KEY
-            ),
-            true
+            )
         );
     }
 
@@ -79,7 +78,10 @@ abstract class AbstractEndpoint implements EndpointInterface
     public function setBody(?array $body)
     {
         if ($body !== null) {
-            $body = ArrayUtil::noNullItems($body, true);
+            $body = ArrayUtil::removerPrefixFromKeys(
+                ArrayUtil::noNullItems($body),
+                'prefixNumber'
+            );
         }
 
         $this->body = $body;
@@ -101,7 +103,10 @@ abstract class AbstractEndpoint implements EndpointInterface
     public function setFormData(?array $formData)
     {
         if ($formData !== null) {
-            $formData = ArrayUtil::noNullItems($formData, true);
+            $formData = ArrayUtil::removerPrefixFromKeys(
+                ArrayUtil::noNullItems($formData),
+                'prefixNumber'
+            );
         }
 
         $this->formData = $formData;
@@ -120,7 +125,7 @@ abstract class AbstractEndpoint implements EndpointInterface
 
         if ($this->snakeCasedParams) {
             /** @var array<string, mixed> $params */
-            $params = ArrayUtil::snakeCasedKeys($params);
+            $params = ArrayUtil::toSnakeCasedKeys($params);
         }
 
         $this->checkParams($params);

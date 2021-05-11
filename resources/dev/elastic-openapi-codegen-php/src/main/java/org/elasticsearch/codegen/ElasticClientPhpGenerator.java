@@ -294,4 +294,36 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
   public String toEnumDefaultValue(String value, String datatype) {
     return value;
   }
+
+  @Override
+  public String toVarName(String name) {
+    if (name.matches("^\\d.*")) {
+      return "prefixNumber" + name;
+    }
+
+    return super.toVarName(name);
+  }
+
+  @Override
+  public String toGetter(String name) {
+    return getterAndSetterCapitalize(name);
+  }
+
+  @Override
+  public String toSetter(String name) {
+    return getterAndSetterCapitalize(name);
+  }
+
+  @Override
+  public String toBooleanGetter(String name) {
+    return getterAndSetterCapitalize(name);
+  }
+
+  @Override
+  public String getterAndSetterCapitalize(String name) {
+    if (name == null || name.length() == 0) {
+        return name;
+    }
+    return toVarName(name);
+  }
 }
