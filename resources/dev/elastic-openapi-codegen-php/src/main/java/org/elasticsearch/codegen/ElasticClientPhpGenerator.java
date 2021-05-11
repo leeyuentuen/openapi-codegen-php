@@ -44,12 +44,10 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
     cliOptions.add(new CliOption(CLIENT_CLASS, "Client file"));
 
     this.setTemplateDir(ElasticClientPhpGenerator.GENERATOR_NAME);
-    this.setSrcBasePath("");
     this.embeddedTemplateDir = this.templateDir();
 
     this.apiDirName = "Endpoint";
     setApiPackage(getInvokerPackage() + "\\" + apiDirName);
-    this.setParameterNamingConvention("camelCase");
   }
 
   @Override
