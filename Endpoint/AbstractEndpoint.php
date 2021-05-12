@@ -78,7 +78,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     public function setBody(?array $body)
     {
         if ($body !== null) {
-            $body = ArrayUtil::removerPrefixFromKeys(
+            $body = ArrayUtil::removePrefixFromKeys(
                 ArrayUtil::noNullItems($body),
                 'prefixNumber'
             );
@@ -103,7 +103,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     public function setFormData(?array $formData)
     {
         if ($formData !== null) {
-            $formData = ArrayUtil::removerPrefixFromKeys(
+            $formData = ArrayUtil::removePrefixFromKeys(
                 ArrayUtil::noNullItems($formData),
                 'prefixNumber'
             );
