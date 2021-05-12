@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace {{invokerPackage}};
 
-use Elastic\OpenApi\Codegen\Util\ArrayUtil;
+use ADS\Util\ArrayUtil;
 {{#models}}{{#model}}use {{importPath}};
 {{/model}}{{/models}}use Elastic\OpenApi\Codegen\AbstractClient;
 
@@ -57,7 +57,7 @@ use Elastic\OpenApi\Codegen\Util\ArrayUtil;
 
         return {{#responses.0.isListContainer}}{{^responses.0.primitiveType}}array_map(
             static fn (array $responseItem) => {{responses.0.baseType}}::fromArray(
-                ArrayUtil::camelCasedKeys($responseItem, true)
+                ArrayUtil::toCamelCasedKeys($responseItem, true)
             ),
             $response
         ){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}::fromArray(ArrayUtil::camelCasedKeys($response, true)){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{#responses.0.primitiveType}}$response{{/responses.0.primitiveType}};
