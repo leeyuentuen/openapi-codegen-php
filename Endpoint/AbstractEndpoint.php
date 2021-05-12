@@ -33,6 +33,8 @@ abstract class AbstractEndpoint implements EndpointInterface
     /** @var array<string>|null  */
     protected ?array $formData = null;
     protected bool $snakeCasedParams = false;
+    protected bool $snakeCasedBody = false;
+    protected bool $snakeCasedFormData = false;
 
     public function method(): string
     {
@@ -77,14 +79,7 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     public function setBody(?array $body)
     {
-        if ($body !== null) {
-            $body = ArrayUtil::removePrefixFromKeys(
-                ArrayUtil::noNullItems($body),
-                'prefixNumber'
-            );
-        }
-
-        $this->body = $body;
+        $this->body = $this->transformData($body);
 
         return $this;
     }
@@ -102,16 +97,33 @@ abstract class AbstractEndpoint implements EndpointInterface
      */
     public function setFormData(?array $formData)
     {
-        if ($formData !== null) {
-            $formData = ArrayUtil::removePrefixFromKeys(
-                ArrayUtil::noNullItems($formData),
-                'prefixNumber'
-            );
-        }
-
-        $this->formData = $formData;
+        $this->formData = $this->transformData($formData);
 
         return $this;
+    }
+
+    /**
+     * @param array<mixed>|null $data
+     *
+     * @return mixed[]|null
+     */
+    private function transformData(?array $data): ?array
+    {
+        if ($data === null) {
+            return $data;
+        }
+
+        $data = ArrayUtil::removePrefixFromKeys(
+            ArrayUtil::noNullItems($data),
+            'prefixNumber'
+        );
+
+        if ($this->snakeCasedBody) {
+            /** @var array<mixed> $data */
+            $data = ArrayUtil::toSnakeCasedKeys($data);
+        }
+
+        return $data;
     }
 
     /**
@@ -179,6 +191,26 @@ abstract class AbstractEndpoint implements EndpointInterface
     public function setSnakeCasedParams(bool $snakeCasedParams)
     {
         $this->snakeCasedParams = $snakeCasedParams;
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function setSnakeCasedBody(bool $snakeCasedBody)
+    {
+        $this->snakeCasedBody = $snakeCasedBody;
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function setSnakeCasedFormData(bool $snakeCasedFormData)
+    {
+        $this->snakeCasedFormData = $snakeCasedFormData;
 
         return $this;
     }
