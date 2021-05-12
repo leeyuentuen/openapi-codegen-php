@@ -60,6 +60,6 @@ use ADS\Util\ArrayUtil;
                 ArrayUtil::toCamelCasedKeys($responseItem, true)
             ),
             $response
-        ){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}::fromArray(ArrayUtil::camelCasedKeys($response, true)){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{#responses.0.primitiveType}}$response{{/responses.0.primitiveType}};
+        ){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{^responses.0.isListContainer}}{{^responses.0.primitiveType}}{{responses.0.baseType}}::fromArray(ArrayUtil::toCamelCasedKeys($response, true)){{/responses.0.primitiveType}}{{/responses.0.isListContainer}}{{#responses.0.primitiveType}}$response{{/responses.0.primitiveType}};
     }
 {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}}}
