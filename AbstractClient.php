@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Elastic\OpenApi\Codegen;
 
+use ADS\Util\ArrayUtil;
 use Elastic\OpenApi\Codegen\Endpoint\EndpointInterface;
 use Elastic\OpenApi\Codegen\Exception\ExceptionHandler;
 use GuzzleHttp\Client;
@@ -105,8 +106,27 @@ abstract class AbstractClient
             return [];
         }
 
-        // Remove HAL metadata
+        return $this->transformHal($body);
+    }
+
+    /**
+     * @param array<mixed> $body
+     *
+     * @return array<mixed>
+     */
+    private function transformHal(array $body): array
+    {
+        if (isset($body['_embedded'])) {
+            $body = array_shift($body['_embedded']);
+        }
+
         unset($body['_links']);
+
+        if (! ArrayUtil::isAssociative($body)) {
+            foreach ($body as &$bodyPart) {
+                unset($bodyPart['_links']);
+            }
+        }
 
         return $body;
     }
