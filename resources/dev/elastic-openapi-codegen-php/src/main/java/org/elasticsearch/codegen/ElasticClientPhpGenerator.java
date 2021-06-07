@@ -48,6 +48,10 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
 
     this.apiDirName = "Endpoint";
     setApiPackage(getInvokerPackage() + "\\" + apiDirName);
+
+    typeMapping.put("date", "\\ADS\\ValueObjects\\Implementation\\String\\DateTimeValue");
+    typeMapping.put("Date", "\\ADS\\ValueObjects\\Implementation\\String\\DateTimeValue");
+    typeMapping.put("DateTime", "\\ADS\\ValueObjects\\Implementation\\String\\DateTimeValue");
   }
 
   @Override
