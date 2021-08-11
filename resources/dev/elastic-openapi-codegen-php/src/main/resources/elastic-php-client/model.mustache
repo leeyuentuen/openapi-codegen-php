@@ -18,14 +18,17 @@ final class {{classname}} implements JsonSchemaAwareRecord
 {{#vars}}{{#isListContainer}}
     /** @var {{dataType}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
     /** @var {{dataType}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}
-    /** @var {{dataType}}<mixed>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isFreeFormObject}}
-    private {{#isNullable}}?{{/isNullable}}{{^required}}{{^isNullable}}?{{/isNullable}}{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}} ${{name}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{^defaultValue}}{{#isNullable}} = null{{/isNullable}}{{^required}}{{^isNullable}} = null{{/isNullable}}{{/required}}{{/defaultValue}};
+    /** @var {{dataType}}<mixed>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isFreeFormObject}}{{#complexType}}{{#isListContainer}}
+    /** @var {{dataType}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{^isListContainer}}
+    /** @var {{complexType}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{/complexType}}{{^complexType}}
+    /** @var {{dataType}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/complexType}}
+    private ${{name}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{^defaultValue}}{{#isNullable}} = null{{/isNullable}}{{^required}}{{^isNullable}} = null{{/isNullable}}{{/required}}{{/defaultValue}};
 {{/vars}}
 {{#vars}}
     /**
     * @return {{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}{{#isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{#isContainer}}{{^isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}{{^isContainer}}{{^isListContainer}}<mixed>{{/isListContainer}}{{/isContainer}}{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}}
     */
-    public function {{getter}}(): {{#isNullable}}?{{/isNullable}}{{^required}}{{^isNullable}}?{{/isNullable}}{{/required}}{{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}
+    public function {{getter}}()
     {
         return $this->{{name}};
     }
