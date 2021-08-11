@@ -3,7 +3,9 @@ package org.elasticsearch.codegen;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.ComposedSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.ObjectSchema;
@@ -84,6 +86,21 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
   @Override
   public String toApiName(String name) {
     return org.openapitools.codegen.utils.StringUtils.camelize(name);
+  }
+
+  @Override
+  public String toAnyOfName(List<String> names, ComposedSchema composedSchema) {
+      return "mixed";
+  }
+
+  @Override
+  public String toOneOfName(List<String> names, ComposedSchema composedSchema) {
+      return "mixed";
+  }
+
+  @Override
+  public String toAllOfName(List<String> names, ComposedSchema composedSchema) {
+      return "mixed";
   }
 
   @Override
@@ -189,6 +206,26 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
       } else {
           return modelPackage() + "\\" + name;
       }
+  }
+
+  @Override
+  public String toModelName(final String name) {
+      if (name.equals("mixed")) {
+        return name;
+      }
+
+      return super.toModelName(name);
+  }
+
+  @Override
+  public CodegenProperty fromProperty(String name, Schema p) {
+      CodegenProperty property = super.fromProperty(name, p);
+
+      if (property.openApiType.equals("mixed")) {
+        property.complexType = "mixed";
+      }
+
+      return property;
   }
 
   private void createSchemaFromParameters(Operation operation, Components components, String inType) {
