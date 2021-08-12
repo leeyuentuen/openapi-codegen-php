@@ -15,18 +15,13 @@ final class {{classname}} implements JsonSchemaAwareRecord
 
 // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
-{{#vars}}{{#isListContainer}}
-    /** @var {{dataType}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
-    /** @var {{dataType}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}
-    /** @var {{dataType}}<mixed>{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isFreeFormObject}}{{#complexType}}{{#isListContainer}}
-    /** @var {{dataType}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{^isListContainer}}
-    /** @var {{complexType}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/isListContainer}}{{/complexType}}{{^complexType}}
-    /** @var {{dataType}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */{{/complexType}}
+{{#vars}}
+    /** @var {{#complexType}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}{{#isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{#isContainer}}{{^isListContainer}}{{^complexType}}<{{items.dataType}}>{{/complexType}}{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}<mixed>{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */
     private ${{name}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{^defaultValue}}{{#isNullable}} = null{{/isNullable}}{{^required}}{{^isNullable}} = null{{/isNullable}}{{/required}}{{/defaultValue}};
 {{/vars}}
 {{#vars}}
     /**
-    * @return {{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}{{#isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{#isContainer}}{{^isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}{{^isContainer}}{{^isListContainer}}<mixed>{{/isListContainer}}{{/isContainer}}{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}}
+    * @return {{#complexType}}{{#isListContainer}}{{dataType}}{{/isListContainer}}{{^isListContainer}}{{complexType}}{{/isListContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}{{#isListContainer}}<{{^complexType}}{{items.dataType}}{{/complexType}}{{#complexType}}{{{.}}}{{/complexType}}>{{/isListContainer}}{{#isContainer}}{{^isListContainer}}{{^complexType}}<{{items.dataType}}>{{/complexType}}{{/isListContainer}}{{/isContainer}}{{#isFreeFormObject}}{{^isContainer}}{{^isListContainer}}<mixed>{{/isListContainer}}{{/isContainer}}{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}}
     */
     public function {{getter}}()
     {

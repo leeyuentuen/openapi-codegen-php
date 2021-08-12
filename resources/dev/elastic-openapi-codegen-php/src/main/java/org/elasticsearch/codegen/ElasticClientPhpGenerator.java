@@ -337,9 +337,18 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
   }
 
   @Override
+  public boolean isDataTypeString(String dataType) {
+    return "String".equalsIgnoreCase(dataType);
+  }
+
+  @Override
   public String toVarName(String name) {
     if (name.matches("^\\d.*")) {
       return "prefixNumber" + name;
+    }
+
+    if (name.matches("^@.*")) {
+      name = "_at" + name;
     }
 
     return super.toVarName(name);
