@@ -376,4 +376,13 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
     }
     return toVarName(name);
   }
+
+  @Override
+  public String toDefaultValue(Schema schema) {
+    if (! ModelUtils.isArraySchema(schema) || schema.getDefault() == null) {
+      return super.toDefaultValue(schema);
+    }
+
+    return schema.getDefault().toString();
+  }
 }
