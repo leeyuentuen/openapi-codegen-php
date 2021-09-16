@@ -383,6 +383,11 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
       return super.toDefaultValue(schema);
     }
 
-    return schema.getDefault().toString();
+    ArraySchema arraySchema = (ArraySchema) schema;
+    if (arraySchema.getItems() != null && ModelUtils.isStringSchema(arraySchema.getItems())) {
+        return arraySchema.getDefault().toString().replace("[", "['").replace("]", "']").replace(", ", "', '");
+    }
+
+    return arraySchema.getDefault().toString();
   }
 }
