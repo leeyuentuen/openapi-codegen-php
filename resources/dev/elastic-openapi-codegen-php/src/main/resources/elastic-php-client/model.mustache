@@ -5,12 +5,14 @@ declare(strict_types=1);
 
 namespace {{modelPackage}};
 
+use ADS\JsonImmutableObjects\DefaultImmutableProperties;
 use ADS\JsonImmutableObjects\JsonSchemaAwareRecordLogic;
 use EventEngine\JsonSchema\JsonSchemaAwareRecord;
 
 {{#model}}
 final class {{classname}} implements JsonSchemaAwareRecord
 {
+    use DefaultImmutableProperties;
     use JsonSchemaAwareRecordLogic;
 
 // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty
