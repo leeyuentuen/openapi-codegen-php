@@ -229,6 +229,10 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
         return name;
       }
 
+      if (name.equals("Object")) {
+        return "\\stdClass";
+      }
+
       return super.toModelName(name);
   }
 
