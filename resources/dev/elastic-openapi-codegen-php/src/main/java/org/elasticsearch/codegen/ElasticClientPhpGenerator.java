@@ -90,16 +90,31 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
 
   @Override
   public String toAnyOfName(List<String> names, ComposedSchema composedSchema) {
+      if (names.size() == 1) {
+        String name = names.get(0);
+        return this.toModelName(name);
+      }
+
       return "mixed";
   }
 
   @Override
   public String toOneOfName(List<String> names, ComposedSchema composedSchema) {
+      if (names.size() == 1) {
+        String name = names.get(0);
+        return this.toModelName(name);
+      }
+
       return "mixed";
   }
 
   @Override
   public String toAllOfName(List<String> names, ComposedSchema composedSchema) {
+      if (names.size() == 1) {
+        String name = names.get(0);
+        return this.toModelName(name);
+      }
+
       return "mixed";
   }
 
