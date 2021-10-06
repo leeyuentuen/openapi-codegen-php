@@ -4,13 +4,13 @@
 declare(strict_types=1);
 
 namespace {{modelPackage}};
+{{#model}}
 {{#getIsAnyType}}
 use Elastic\OpenApi\Codegen\ImmutableRecords\AnyType;
 {{/getIsAnyType}}{{^getIsAnyType}}
 use ADS\JsonImmutableObjects\DefaultImmutableProperties;
 use EventEngine\JsonSchema\JsonSchemaAwareRecord;{{/getIsAnyType}}
 
-{{#model}}
 final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord{{/getIsAnyType}}
 {
     {{^getIsAnyType}}use DefaultImmutableProperties;{{/getIsAnyType}}{{#getIsAnyType}}use AnyType;
