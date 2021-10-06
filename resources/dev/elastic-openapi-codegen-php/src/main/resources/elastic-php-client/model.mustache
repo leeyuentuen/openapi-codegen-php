@@ -4,14 +4,26 @@
 declare(strict_types=1);
 
 namespace {{modelPackage}};
-
+{{#getIsAnyType}}
+use Elastic\OpenApi\Codegen\ImmutableRecords\AnyType;
+{{/getIsAnyType}}{{^getIsAnyType}}
 use ADS\JsonImmutableObjects\DefaultImmutableProperties;
-use EventEngine\JsonSchema\JsonSchemaAwareRecord;
+use EventEngine\JsonSchema\JsonSchemaAwareRecord;{{/getIsAnyType}}
 
 {{#model}}
-final class {{classname}} implements JsonSchemaAwareRecord
+final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord{{/getIsAnyType}}
 {
-    use DefaultImmutableProperties;
+    {{^getIsAnyType}}use DefaultImmutableProperties;{{/getIsAnyType}}{{#getIsAnyType}}use AnyType;
+
+    /**
+    * @inheritDoc
+    */
+    public static function models(): array {
+        return [{{#interfaceModels}}
+            {{name}}::class,{{/interfaceModels}}
+        ];
+    }
+{{/getIsAnyType}}{{^getIsAnyType}}
 
 // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
@@ -42,4 +54,4 @@ final class {{classname}} implements JsonSchemaAwareRecord
         ];
     }
 // phpcs:enable
-}{{/model}}{{/models}}
+{{/getIsAnyType}}}{{/model}}{{/models}}
