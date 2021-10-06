@@ -16,7 +16,7 @@ final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord{{/ge
     {{^getIsAnyType}}use DefaultImmutableProperties;{{/getIsAnyType}}{{#getIsAnyType}}use AnyType;
 
     /**
-    * @inheritDoc
+    * @return array<class-string>
     */
     public static function models(): array {
         return [{{#interfaceModels}}
