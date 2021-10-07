@@ -53,5 +53,17 @@ final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord{{/ge
             '{{baseName}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/isListContainer}}{{/isContainer}}{{/vars}}
         ];
     }
+
+    /**
+    * @return array<string, int>
+    *
+    * @phpcsSuppress SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
+    */
+    private static function maxValues(): array
+    {
+        return [{{#vars}}{{#maximum}}
+            '{{baseName}}' => {{maximum}},{{/maximum}}{{/vars}}
+        ];
+    }
 // phpcs:enable
 {{/getIsAnyType}}}{{/model}}{{/models}}
