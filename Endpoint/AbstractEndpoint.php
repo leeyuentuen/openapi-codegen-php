@@ -165,7 +165,12 @@ abstract class AbstractEndpoint implements EndpointInterface
             return;
         }
 
-        $whitelist = array_merge($this->paramWhitelist, $this->routeParams);
+        $paramWhiteList = array_map(
+            static fn (string $param) => substr($param, -2) === '[]' ? rtrim($param, '[]') : $param,
+            $this->paramWhitelist
+        );
+
+        $whitelist = array_merge($paramWhiteList, $this->routeParams);
         $invalidParams = array_diff(array_keys($params), $whitelist);
         $countInvalid = count($invalidParams);
 
