@@ -72,7 +72,7 @@ final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord, Spe
     public function convertKeyForRecord(string $key): string
     {
         $map = [{{#vars}}
-            '{{baseName}}' => '{{name}}'{{/vars}}
+            '{{baseName}}' => '{{name}}',{{/vars}}
         ];
 
         return $this->convertByMap($key, $map);
@@ -81,7 +81,7 @@ final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord, Spe
     public function convertKeyForArray(string $key): string
     {
         $map = [{{#vars}}
-            '{{name}}' => '{{baseName}}'{{/vars}}
+            '{{name}}' => '{{baseName}}',{{/vars}}
         ];
 
         return $this->convertByMap($key, $map);
