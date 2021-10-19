@@ -8,12 +8,15 @@ namespace {{modelPackage}};
 {{#getIsAnyType}}
 use Elastic\OpenApi\Codegen\ImmutableRecords\AnyType;
 {{/getIsAnyType}}{{^getIsAnyType}}
-use ADS\JsonImmutableObjects\IgnoreExtraProperties;
+use ADS\JsonImmutableObjects\DefaultImmutableProperties;
+use Elastic\OpenApi\Codegen\Endpoint\SpecialKeySupportLogic;
+use EventEngine\Data\SpecialKeySupport;
 use EventEngine\JsonSchema\JsonSchemaAwareRecord;{{/getIsAnyType}}
 
-final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord{{/getIsAnyType}}
+final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord, SpecialKeySupport{{/getIsAnyType}}
 {
-    {{^getIsAnyType}}use IgnoreExtraProperties;{{/getIsAnyType}}{{#getIsAnyType}}use AnyType;
+    {{^getIsAnyType}}use DefaultImmutableProperties;
+    use SpecialKeySupportLogic;{{/getIsAnyType}}{{#getIsAnyType}}use AnyType;
 
     /**
     * @return array<class-string>
@@ -49,8 +52,8 @@ final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord{{/ge
     private static function arrayPropItemTypeMap(): array
     {
         return [{{#vars}}{{#isListContainer}}
-            '{{baseName}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
-            '{{baseName}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/isListContainer}}{{/isContainer}}{{/vars}}
+            '{{name}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/isListContainer}}{{#isContainer}}{{^isListContainer}}
+            '{{name}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/isListContainer}}{{/isContainer}}{{/vars}}
         ];
     }
 
@@ -62,8 +65,26 @@ final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord{{/ge
     private static function maxValues(): array
     {
         return [{{#vars}}{{#maximum}}
-            '{{baseName}}' => {{maximum}},{{/maximum}}{{/vars}}
+            '{{name}}' => {{maximum}},{{/maximum}}{{/vars}}
         ];
+    }
+
+    public function convertKeyForRecord(string $key): string
+    {
+        $map = [{{#vars}}
+            '{{baseName}}' => '{{name}}'{{/vars}}
+        ];
+
+        return $this->convertByMap($key, $map);
+    }
+
+    public function convertKeyForArray(string $key): string
+    {
+        $map = [{{#vars}}
+            '{{name}}' => '{{baseName}}'{{/vars}}
+        ];
+
+        return $this->convertByMap($key, $map);
     }
 // phpcs:enable
 {{/getIsAnyType}}}{{/model}}{{/models}}
