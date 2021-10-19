@@ -49,7 +49,7 @@ abstract class AbstractEndpoint implements EndpointInterface
             $uri = str_replace(sprintf('{%s}', $paramName), $this->params[$paramName], $uri);
         }
 
-        return $uri;
+        return ltrim($uri, '/');
     }
 
     /**
