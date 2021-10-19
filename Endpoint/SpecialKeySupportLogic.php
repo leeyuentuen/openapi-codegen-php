@@ -15,6 +15,6 @@ trait SpecialKeySupportLogic
             return $key;
         }
 
-        return $map[$key];
+        return rtrim($map[$key], '[]');
     }
 }
