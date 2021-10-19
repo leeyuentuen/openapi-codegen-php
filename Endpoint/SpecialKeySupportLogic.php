@@ -15,6 +15,12 @@ trait SpecialKeySupportLogic
             return $key;
         }
 
-        return rtrim($map[$key], '[]');
+        $result = $map[$key];
+
+        if (substr($result, -2) === '[]') {
+            return rtrim($result, '[]');
+        }
+
+        return $result;
     }
 }
