@@ -25,9 +25,9 @@ abstract class AbstractClientBuilder
     /**
      * Return the configured client.
      */
-    abstract public function build() : AbstractClient;
+    abstract public function build(): AbstractClient;
 
-    protected function connection() : Client
+    protected function connection(): Client
     {
         if ($this->client === null) {
             throw new RuntimeException(
@@ -36,6 +36,23 @@ abstract class AbstractClientBuilder
         }
 
         return $this->client;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function configs(string $path): array
+    {
+        if (! file_exists($path)) {
+            throw new RuntimeException(
+                sprintf('Could not load configs for path \'%s\'.', $path)
+            );
+        }
+
+        /** @var string $content */
+        $content = file_get_contents($path);
+
+        return json_decode($content, true);
     }
 
     /**
@@ -48,5 +65,5 @@ abstract class AbstractClientBuilder
         return $this;
     }
 
-    abstract protected function endpointBuilder() : EndpointBuilder;
+    abstract protected function endpointBuilder(): EndpointBuilder;
 }

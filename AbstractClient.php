@@ -37,11 +37,17 @@ abstract class AbstractClient
 
     private ?string $prependPath = null;
     private ?ResponseInterface $lastResponse = null;
+    /** @var array<string, mixed> */
+    private array $configs;
 
-    public function __construct(callable $endpointBuilder, Client $connection)
+    /**
+     * @param array<string, mixed> $configs
+     */
+    public function __construct(callable $endpointBuilder, Client $connection, array $configs = [])
     {
         $this->endpointBuilder = $endpointBuilder;
         $this->connection = $connection;
+        $this->configs = $configs;
     }
 
     /**
@@ -106,7 +112,11 @@ abstract class AbstractClient
             return [];
         }
 
-        return $this->transformHal($body);
+        if ($this->configs['transformHal'] ?? false) {
+            return $this->transformHal($body);
+        }
+
+        return $body;
     }
 
     /**
