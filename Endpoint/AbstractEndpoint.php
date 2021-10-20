@@ -53,14 +53,27 @@ abstract class AbstractEndpoint implements EndpointInterface
     }
 
     /**
+     * @return array<string>
+     */
+    private function paramWhitelist(): array
+    {
+        return array_map(
+            static fn (string $param) => substr($param, -2) === '[]' ? rtrim($param, '[]') : $param,
+            $this->paramWhitelist
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function params(): array
     {
+        $paramWhiteList = $this->paramWhitelist();
+
         return ArrayUtil::noNullItems(
             array_filter(
                 $this->params,
-                fn (string $paramName) => in_array($paramName, $this->paramWhitelist),
+                static fn (string $paramName) => in_array($paramName, $paramWhiteList),
                 ARRAY_FILTER_USE_KEY
             )
         );
@@ -165,12 +178,7 @@ abstract class AbstractEndpoint implements EndpointInterface
             return;
         }
 
-        $paramWhiteList = array_map(
-            static fn (string $param) => substr($param, -2) === '[]' ? rtrim($param, '[]') : $param,
-            $this->paramWhitelist
-        );
-
-        $whitelist = array_merge($paramWhiteList, $this->routeParams);
+        $whitelist = array_merge($this->paramWhitelist(), $this->routeParams);
         $invalidParams = array_diff(array_keys($params), $whitelist);
         $countInvalid = count($invalidParams);
 
