@@ -8,14 +8,14 @@ namespace {{modelPackage}};
 {{#getIsAnyType}}
 use Elastic\OpenApi\Codegen\ImmutableRecords\AnyType;
 {{/getIsAnyType}}{{^getIsAnyType}}
-use ADS\JsonImmutableObjects\DefaultImmutableProperties;
+use ADS\JsonImmutableObjects\IgnoreExtraProperties;
 use Elastic\OpenApi\Codegen\Endpoint\SpecialKeySupportLogic;
 use EventEngine\Data\SpecialKeySupport;
 use EventEngine\JsonSchema\JsonSchemaAwareRecord;{{/getIsAnyType}}
 
 final class {{classname}}{{^getIsAnyType}} implements JsonSchemaAwareRecord, SpecialKeySupport{{/getIsAnyType}}
 {
-    {{^getIsAnyType}}use DefaultImmutableProperties;
+    {{^getIsAnyType}}use IgnoreExtraProperties;
     use SpecialKeySupportLogic;{{/getIsAnyType}}{{#getIsAnyType}}use AnyType;
 
     /**
