@@ -7,6 +7,9 @@ composer.lock
 .openapi-generator/
 .openapi-generator-ignore
 
+### PHPUnit ###
+.phpunit.result.cache
+
 ### IDEs ###
 *.tmp
 *.bak
