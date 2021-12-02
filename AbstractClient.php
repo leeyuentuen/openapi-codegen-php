@@ -156,13 +156,7 @@ abstract class AbstractClient
      */
     protected function buildOptions(Endpoint\EndpointInterface $endpoint): array
     {
-        $options = [];
-        if ($this->optionBuilder) {
-            $optionBuilder = $this->optionBuilder;
-
-            $options = $optionBuilder($endpoint);
-        }
-
+        $options = $this->optionBuilder ? ($this->optionBuilder)($endpoint) : [];
         $params = $endpoint->params();
         $body = $endpoint->body();
         $formData = $endpoint->formData();
