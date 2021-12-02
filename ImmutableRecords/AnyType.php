@@ -39,11 +39,15 @@ trait AnyType
         foreach (static::models() as $model) {
             try {
                 $value = $model::fromArray($data);
+
+                return new self($value);
             } catch (Throwable $exception) {
             }
         }
 
-        return new self($value);
+        throw new RuntimeException(
+            sprintf('No model matches the given data for class \'%s\'.', static::class)
+        );
     }
 
     /**
