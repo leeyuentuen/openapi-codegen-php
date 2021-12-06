@@ -34,7 +34,11 @@ trait AnyType
      */
     public static function fromArray(array $data)
     {
-        $value = null;
+        $record = self::fromArrayViaDiscriminator($data);
+
+        if ($record !== null) {
+            return $record;
+        }
 
         foreach (static::models() as $model) {
             try {
@@ -48,6 +52,49 @@ trait AnyType
         throw new RuntimeException(
             sprintf('No model matches the given data for class \'%s\'.', static::class)
         );
+    }
+
+    /**
+     * @param array<mixed> $data
+     *
+     * @return static|null
+     */
+    public static function fromArrayViaDiscriminator(array $data)
+    {
+        $interfaces = class_implements(static::class);
+
+        if ($interfaces === false || ! in_array(Discriminator::class, $interfaces)) {
+            return null;
+        }
+
+        $discriminatorProperty = self::discriminatorProperty();
+
+        if (! isset($data[$discriminatorProperty])) {
+            throw new RuntimeException(
+                sprintf(
+                    'No discriminator property \'%s\' found to generate a \'%s\'.',
+                    $discriminatorProperty,
+                    static::class
+                )
+            );
+        }
+
+        $discriminatorMappingValue = $data[$discriminatorProperty];
+        $discriminatorMapping = self::discriminatorMapping();
+
+        if (! isset($discriminatorMapping[$discriminatorMappingValue])) {
+            throw new RuntimeException(
+                sprintf(
+                    'Discriminator value \'%s\' is not a valid one for \'%s\'.',
+                    $discriminatorMappingValue,
+                    static::class
+                )
+            );
+        }
+
+        $model = $discriminatorMapping[$discriminatorMappingValue];
+
+        return new self($model::fromArray($data));
     }
 
     /**
