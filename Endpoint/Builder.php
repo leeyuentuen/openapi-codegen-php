@@ -16,14 +16,12 @@ namespace Elastic\OpenApi\Codegen\Endpoint;
  */
 class Builder
 {
-    private string $namespace;
     private bool $snakeCasedParams = false;
     private bool $snakeCasedBody = false;
     private bool $snakeCasedFormData = false;
 
-    public function __construct(string $namespace)
+    public function __construct(private string $namespace)
     {
-        $this->namespace = $namespace;
     }
 
     /**
@@ -33,7 +31,10 @@ class Builder
     {
         $className = sprintf('%s\\%s', $this->namespace, $endpointName);
 
-        return (new $className())
+        /** @var AbstractEndpoint $endpoint */
+        $endpoint = new $className();
+
+        return $endpoint
             ->setSnakeCasedParams($this->snakeCasedParams)
             ->setSnakeCasedBody($this->snakeCasedBody)
             ->setSnakeCasedFormData($this->snakeCasedFormData);

@@ -13,7 +13,7 @@ final class ExceptionHandler
     public static function fromGuzzleClientException(
         ClientException $exception,
         ?callable $exceptionHandler = null
-    ) : Throwable {
+    ): Throwable {
         if ($exceptionHandler === null) {
             return $exception;
         }
@@ -26,7 +26,7 @@ final class ExceptionHandler
             );
         }
 
-        $exceptionData = json_decode($response->getBody()->getContents(), true);
+        $exceptionData = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
         $throwable = $exceptionHandler($exceptionData);
 

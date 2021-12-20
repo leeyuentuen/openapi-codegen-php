@@ -26,11 +26,11 @@ abstract class AbstractEndpoint implements EndpointInterface
     protected array $routeParams = [];
     /** @var array<string>  */
     protected array $paramWhitelist = [];
-    /** @var array<string, mixed>  */
+    /** @var array<string, string>  */
     protected array $params = [];
-    /** @var array<string>|null  */
+    /** @var array<string, mixed>|null  */
     protected ?array $body = null;
-    /** @var array<string>|null  */
+    /** @var array<string, mixed>|null  */
     protected ?array $formData = null;
     protected bool $snakeCasedParams = false;
     protected bool $snakeCasedBody = false;
@@ -58,7 +58,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     private function paramWhitelist(): array
     {
         return array_map(
-            static fn (string $param) => substr($param, -2) === '[]' ? rtrim($param, '[]') : $param,
+            static fn (string $param) => str_ends_with($param, '[]') ? rtrim($param, '[]') : $param,
             $this->paramWhitelist
         );
     }
@@ -70,13 +70,16 @@ abstract class AbstractEndpoint implements EndpointInterface
     {
         $paramWhiteList = $this->paramWhitelist();
 
-        return ArrayUtil::noNullItems(
+        /** @var array<string> $result */
+        $result = ArrayUtil::noNullItems(
             array_filter(
                 $this->params,
                 static fn (string $paramName) => in_array($paramName, $paramWhiteList),
                 ARRAY_FILTER_USE_KEY
             )
         );
+
+        return $result;
     }
 
     /**
@@ -87,10 +90,7 @@ abstract class AbstractEndpoint implements EndpointInterface
         return $this->body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setBody(?array $body)
+    public function setBody(?array $body): static
     {
         $this->body = $this->transformData($body);
 
@@ -105,10 +105,7 @@ abstract class AbstractEndpoint implements EndpointInterface
         return $this->formData;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setFormData(?array $formData)
+    public function setFormData(?array $formData): static
     {
         $this->formData = $this->transformData($formData);
 
@@ -116,9 +113,9 @@ abstract class AbstractEndpoint implements EndpointInterface
     }
 
     /**
-     * @param array<mixed>|null $data
+     * @param array<string, mixed>|null $data
      *
-     * @return mixed[]|null
+     * @return array<string, mixed>|null
      */
     private function transformData(?array $data): ?array
     {
@@ -139,22 +136,20 @@ abstract class AbstractEndpoint implements EndpointInterface
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setParams(?array $params)
+    public function setParams(?array $params): static
     {
         if ($params === null) {
             return $this;
         }
 
         if ($this->snakeCasedParams) {
-            /** @var array<string, mixed> $params */
+            /** @var array<string, string> $params */
             $params = ArrayUtil::toSnakeCasedKeys($params);
         }
 
         $this->checkParams($params);
 
+        /** @var array<string> $params */
         $params = array_map(
             static fn ($paramValue) => $paramValue instanceof ValueObject ? $paramValue->toValue() : $paramValue,
             $params
@@ -201,7 +196,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     /**
      * @return static
      */
-    public function setSnakeCasedParams(bool $snakeCasedParams)
+    public function setSnakeCasedParams(bool $snakeCasedParams): static
     {
         $this->snakeCasedParams = $snakeCasedParams;
 
@@ -211,7 +206,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     /**
      * @return static
      */
-    public function setSnakeCasedBody(bool $snakeCasedBody)
+    public function setSnakeCasedBody(bool $snakeCasedBody): static
     {
         $this->snakeCasedBody = $snakeCasedBody;
 
@@ -221,7 +216,7 @@ abstract class AbstractEndpoint implements EndpointInterface
     /**
      * @return static
      */
-    public function setSnakeCasedFormData(bool $snakeCasedFormData)
+    public function setSnakeCasedFormData(bool $snakeCasedFormData): static
     {
         $this->snakeCasedFormData = $snakeCasedFormData;
 

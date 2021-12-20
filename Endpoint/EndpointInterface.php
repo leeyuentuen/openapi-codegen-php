@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Elastic\OpenApi\Codegen\Endpoint;
 
+use ADS\ValueObjects\ValueObject;
+
 /**
  * API endpoint interface.
  */
@@ -19,58 +21,58 @@ interface EndpointInterface
     /**
      * HTTP method for the current endpoint.
      */
-    public function method() : string;
+    public function method(): string;
 
     /**
      * URI for the current endpoint.
      */
-    public function uri() : string;
+    public function uri(): string;
 
     /**
      * Params data for the current endpoint.
      *
      * @return array<string>
      */
-    public function params() : array;
+    public function params(): array;
 
     /**
      * Body content for the current endpoint.
      *
-     * @return array<mixed>|null
+     * @return array<string, mixed>
      */
-    public function body() : ?array;
+    public function body(): ?array;
 
     /**
      * FormData content for the current endpoint.
      *
-     * @return array<mixed>|null
+     * @return array<string, mixed>
      */
-    public function formData() : ?array;
+    public function formData(): ?array;
 
     /**
      * Set body data for the endpoint.
      *
-     * @param array<mixed>|null $body
+     * @param array<string, mixed> $body
      *
      * @return static
      */
-    public function setBody(?array $body);
+    public function setBody(?array $body): static;
 
     /**
      * Set body data for the endpoint.
      *
-     * @param array<mixed>|null $formData
+     * @param array<string, mixed> $formData
      *
      * @return static
      */
-    public function setFormData(?array $formData);
+    public function setFormData(?array $formData): static;
 
     /**
      * Set params data for the endpoint.
      *
-     * @param array<string, mixed>|null $params
+     * @param array<string, string|ValueObject>|null $params
      *
      * @return static
      */
-    public function setParams(?array $params);
+    public function setParams(?array $params): static;
 }

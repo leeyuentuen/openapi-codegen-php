@@ -28,7 +28,8 @@
     "overtrue/phplint": "^1.1",
     "combell/platforms-php-coding-standard": "dev-php8.1",
     "phpro/grumphp": "^1",
-    "phpstan/phpstan": "^1"
+    "phpstan/phpstan": "^1",
+    "rector/rector": "^0.12.8"
   },
   "repositories": [
     {

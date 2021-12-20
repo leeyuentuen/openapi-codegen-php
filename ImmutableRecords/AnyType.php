@@ -9,13 +9,9 @@ use Throwable;
 
 trait AnyType
 {
-    /** @var mixed */
-    private $value;
+    private mixed $value;
 
-    /**
-     * @param mixed $value
-     */
-    private function __construct($value)
+    private function __construct(mixed $value)
     {
         if ($value === null) {
             throw new RuntimeException(
@@ -32,7 +28,7 @@ trait AnyType
      *
      * @return static
      */
-    public static function fromArray(array $data)
+    public static function fromArray(array $data): static
     {
         $record = self::fromArrayViaDiscriminator($data);
 
@@ -45,7 +41,7 @@ trait AnyType
                 $value = $model::fromArray($data);
 
                 return new self($value);
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
             }
         }
 
@@ -59,7 +55,7 @@ trait AnyType
      *
      * @return static|null
      */
-    public static function fromArrayViaDiscriminator(array $data)
+    public static function fromArrayViaDiscriminator(array $data): ?static
     {
         $interfaces = class_implements(static::class);
 
@@ -105,10 +101,7 @@ trait AnyType
         return $this->value->toArray();
     }
 
-    /**
-     * @return mixed
-     */
-    public function toValue()
+    public function toValue(): mixed
     {
         return $this->value;
     }
