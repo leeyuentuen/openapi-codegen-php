@@ -46,7 +46,7 @@ abstract class AbstractEndpoint implements EndpointInterface
         $uri = $this->uri;
 
         foreach ($this->routeParams as $paramName) {
-            $uri = str_replace(sprintf('{%s}', $paramName), $this->params[$paramName], $uri);
+            $uri = str_replace(sprintf('{%s}', $paramName), strval($this->params[$paramName]), $uri);
         }
 
         return ltrim($uri, '/');
