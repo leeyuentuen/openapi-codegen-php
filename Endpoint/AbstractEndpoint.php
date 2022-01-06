@@ -71,7 +71,7 @@ abstract class AbstractEndpoint implements EndpointInterface
         $paramWhiteList = $this->paramWhitelist();
 
         /** @var array<string> $result */
-        $result = ArrayUtil::noNullItems(
+        $result = ArrayUtil::rejectNullValues(
             array_filter(
                 $this->params,
                 static fn (string $paramName) => in_array($paramName, $paramWhiteList),
@@ -123,6 +123,8 @@ abstract class AbstractEndpoint implements EndpointInterface
             return $data;
         }
 
+        $data = ArrayUtil::rejectNullValues($data);
+        $data = ArrayUtil::rejectEmptyArrayValues($data);
         $data = ArrayUtil::removePrefixFromKeys(
             $data,
             'prefixNumber'
