@@ -124,7 +124,7 @@ abstract class AbstractEndpoint implements EndpointInterface
         }
 
         $data = ArrayUtil::removePrefixFromKeys(
-            ArrayUtil::noNullItems($data),
+            $data,
             'prefixNumber'
         );
 
