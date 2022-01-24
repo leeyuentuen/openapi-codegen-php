@@ -58,9 +58,9 @@ use ADS\ValueObjects\ValueObject;
         $response = $this->performRequest(
             $this
                 ->endpoint('{{classname}}'){{#queryParams.0}}{{#pathParams.0}}
-                ->setParams($parameters){{/pathParams.0}}{{/queryParams.0}}{{#queryParams.0}}
-                ->setParams($parameters){{/queryParams.0}}{{#pathParams.0}}
-                ->setParams($parameters){{/pathParams.0}}{{#bodyParams.0}}
+                ->setParams($parameters){{/pathParams.0}}{{/queryParams.0}}{{#queryParams.0}}{{^pathParams.0}}
+                ->setParams($parameters){{/pathParams.0}}{{/queryParams.0}}{{#pathParams.0}}{{^queryParams.0}}
+                ->setParams($parameters){{/queryParams.0}}{{/pathParams.0}}{{#bodyParams.0}}
                 ->setBody({{^bodyParams.0.required}}$body !== null ? {{/bodyParams.0.required}}{{#bodyParams.0.isPrimitiveType}}{{^bodyParams.0.isFreeFormObject}}[]{{/bodyParams.0.isFreeFormObject}}{{/bodyParams.0.isPrimitiveType}}{{#bodyParams.0.isFreeFormObject}}(array) $body{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isPrimitiveType}}$body->toArray(){{/bodyParams.0.isPrimitiveType}}{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.required}} : []{{/bodyParams.0.required}}){{/bodyParams.0}}{{#formParams.0}}
                 ->setFormData({{#formParams.0.required}}$form->toArray(){{/formParams.0.required}}{{^formParams.0.required}}$form ? $form->toArray() : []{{/formParams.0.required}}){{/formParams.0}}
         );
