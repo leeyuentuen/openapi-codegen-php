@@ -8,7 +8,7 @@ COPY . /build/
 RUN mvn package
 
 
-FROM openapitools/openapi-generator-cli:latest as runner
+FROM openapitools/openapi-generator-cli:v5.3.0 as runner
 
 ENV OPENAPI_GEN_ROOT_DIR /opt/openapi-generator
 ENV OPENAPI_GEN_JARS_DIR ${OPENAPI_GEN_ROOT_DIR}/jars
