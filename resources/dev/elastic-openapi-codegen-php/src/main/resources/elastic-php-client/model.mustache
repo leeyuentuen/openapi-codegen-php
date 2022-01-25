@@ -48,12 +48,12 @@ final class {{classname}}{{^getIsAnyType}} implements SpecialKeySupport, JsonSch
 // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
 {{#vars}}
-    /** @var {{#complexType}}{{^isContainer}}{{complexType}}{{/isContainer}}{{#isContainer}}{{dataType}}{{/isContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}{{#isContainer}}<{{^items.complexType}}{{#items.isContainer}}mixed{{/items.isContainer}}{{^items.isContainer}}{{items.dataType}}{{/items.isContainer}}{{/items.complexType}}{{#items.complexType}}{{{.}}}{{/items.complexType}}>{{/isContainer}}{{#isFreeFormObject}}<mixed>{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */
+    /** @var {{#complexType}}{{^isContainer}}{{complexType}}{{/isContainer}}{{#isContainer}}{{baseType}}{{/isContainer}}{{/complexType}}{{^complexType}}{{baseType}}{{/complexType}}{{#isContainer}}<{{^items.complexType}}{{#items.isContainer}}mixed{{/items.isContainer}}{{^items.isContainer}}{{items.baseType}}{{/items.isContainer}}{{/items.complexType}}{{#items.complexType}}{{{.}}}{{/items.complexType}}>{{/isContainer}}{{#isFreeFormObject}}<mixed>{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}} */
     private ${{name}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{^defaultValue}}{{#isNullable}} = null{{/isNullable}}{{^required}}{{^isNullable}} = null{{/isNullable}}{{/required}}{{/defaultValue}};
 {{/vars}}
 {{#vars}}
     /**
-    * @return {{#complexType}}{{^isContainer}}{{complexType}}{{/isContainer}}{{#isContainer}}{{dataType}}{{/isContainer}}{{/complexType}}{{^complexType}}{{dataType}}{{/complexType}}{{#isContainer}}<{{^items.complexType}}{{#items.isContainer}}mixed{{/items.isContainer}}{{^items.isContainer}}{{items.dataType}}{{/items.isContainer}}{{/items.complexType}}{{#items.complexType}}{{{.}}}{{/items.complexType}}>{{/isContainer}}{{#isFreeFormObject}}<mixed>{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}}
+    * @return {{#complexType}}{{^isContainer}}{{complexType}}{{/isContainer}}{{#isContainer}}{{baseType}}{{/isContainer}}{{/complexType}}{{^complexType}}{{baseType}}{{/complexType}}{{#isContainer}}<{{^items.complexType}}{{#items.isContainer}}mixed{{/items.isContainer}}{{^items.isContainer}}{{items.baseType}}{{/items.isContainer}}{{/items.complexType}}{{#items.complexType}}{{{.}}}{{/items.complexType}}>{{/isContainer}}{{#isFreeFormObject}}<mixed>{{/isFreeFormObject}}{{#isNullable}}|null{{/isNullable}}{{^required}}{{^isNullable}}|null{{/isNullable}}{{/required}}
     */
     public function {{getter}}()
     {
@@ -67,8 +67,8 @@ final class {{classname}}{{^getIsAnyType}} implements SpecialKeySupport, JsonSch
     private static function arrayPropItemTypeMap(): array
     {
         return [{{#vars}}{{#isListContainer}}{{^items.isContainer}}
-            '{{name}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/items.isContainer}}{{/isListContainer}}{{#isContainer}}{{^isListContainer}}{{^items.isContainer}}
-            '{{name}}' => {{^complexType}}'{{items.dataType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/items.isContainer}}{{/isListContainer}}{{/isContainer}}{{/vars}}
+            '{{name}}' => {{^complexType}}'{{items.baseType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/items.isContainer}}{{/isListContainer}}{{#isContainer}}{{^isListContainer}}{{^items.isContainer}}
+            '{{name}}' => {{^complexType}}'{{items.baseType}}'{{/complexType}}{{#complexType}}{{{.}}}::class{{/complexType}},{{/items.isContainer}}{{/isListContainer}}{{/isContainer}}{{/vars}}
         ];
     }
 
