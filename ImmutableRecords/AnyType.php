@@ -9,9 +9,18 @@ use Throwable;
 
 trait AnyType
 {
-    private mixed $value;
+    /**
+     * @var mixed
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
+     */
+    private $value;
 
-    private function __construct(mixed $value)
+    /**
+     * @param mixed $value
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+     */
+    private function __construct($value)
     {
         if ($value === null) {
             throw new RuntimeException(
@@ -27,8 +36,10 @@ trait AnyType
      * @param array<mixed> $data
      *
      * @return static
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data)
     {
         $record = self::fromArrayViaDiscriminator($data);
 
@@ -41,7 +52,7 @@ trait AnyType
                 $value = $model::fromArray($data);
 
                 return new self($value);
-            } catch (Throwable) {
+            } catch (Throwable $exception) {
             }
         }
 
@@ -54,8 +65,10 @@ trait AnyType
      * @param array<mixed> $data
      *
      * @return static|null
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public static function fromArrayViaDiscriminator(array $data): ?static
+    public static function fromArrayViaDiscriminator(array $data)
     {
         $interfaces = class_implements(static::class);
 
@@ -101,7 +114,12 @@ trait AnyType
         return $this->value->toArray();
     }
 
-    public function toValue(): mixed
+    /**
+     * @return mixed
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+     */
+    public function toValue()
     {
         return $this->value;
     }

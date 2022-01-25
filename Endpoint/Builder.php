@@ -19,9 +19,11 @@ class Builder
     private bool $snakeCasedParams = false;
     private bool $snakeCasedBody = false;
     private bool $snakeCasedFormData = false;
+    private string $namespace;
 
-    public function __construct(private string $namespace)
+    public function __construct(string $namespace)
     {
+        $this->namespace = $namespace;
     }
 
     /**

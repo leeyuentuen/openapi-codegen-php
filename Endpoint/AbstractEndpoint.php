@@ -58,7 +58,13 @@ abstract class AbstractEndpoint implements EndpointInterface
     private function paramWhitelist(): array
     {
         return array_map(
-            static fn (string $param) => str_ends_with($param, '[]') ? rtrim($param, '[]') : $param,
+            static fn (string $param) => substr_compare(
+                $param,
+                '[]',
+                -strlen('[]')
+            ) === 0
+                ? rtrim($param, '[]')
+                : $param,
             $this->paramWhitelist
         );
     }
@@ -90,7 +96,10 @@ abstract class AbstractEndpoint implements EndpointInterface
         return $this->body;
     }
 
-    public function setBody(?array $body): static
+    /**
+     * {@inheritdoc}
+     */
+    public function setBody(?array $body)
     {
         $this->body = $this->transformData($body);
 
@@ -105,7 +114,10 @@ abstract class AbstractEndpoint implements EndpointInterface
         return $this->formData;
     }
 
-    public function setFormData(?array $formData): static
+    /**
+     * {@inheritdoc}
+     */
+    public function setFormData(?array $formData)
     {
         $this->formData = $this->transformData($formData);
 
@@ -138,7 +150,10 @@ abstract class AbstractEndpoint implements EndpointInterface
         return $data;
     }
 
-    public function setParams(?array $params): static
+    /**
+     * {@inheritdoc}
+     */
+    public function setParams(?array $params)
     {
         if ($params === null) {
             return $this;
@@ -197,8 +212,10 @@ abstract class AbstractEndpoint implements EndpointInterface
 
     /**
      * @return static
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function setSnakeCasedParams(bool $snakeCasedParams): static
+    public function setSnakeCasedParams(bool $snakeCasedParams)
     {
         $this->snakeCasedParams = $snakeCasedParams;
 
@@ -207,8 +224,10 @@ abstract class AbstractEndpoint implements EndpointInterface
 
     /**
      * @return static
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function setSnakeCasedBody(bool $snakeCasedBody): static
+    public function setSnakeCasedBody(bool $snakeCasedBody)
     {
         $this->snakeCasedBody = $snakeCasedBody;
 
@@ -217,8 +236,10 @@ abstract class AbstractEndpoint implements EndpointInterface
 
     /**
      * @return static
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function setSnakeCasedFormData(bool $snakeCasedFormData): static
+    public function setSnakeCasedFormData(bool $snakeCasedFormData)
     {
         $this->snakeCasedFormData = $snakeCasedFormData;
 

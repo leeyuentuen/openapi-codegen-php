@@ -55,8 +55,10 @@ interface EndpointInterface
      * @param array<string, mixed> $body
      *
      * @return static
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function setBody(?array $body): static;
+    public function setBody(?array $body);
 
     /**
      * Set body data for the endpoint.
@@ -64,8 +66,10 @@ interface EndpointInterface
      * @param array<string, mixed> $formData
      *
      * @return static
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function setFormData(?array $formData): static;
+    public function setFormData(?array $formData);
 
     /**
      * Set params data for the endpoint.
@@ -73,6 +77,8 @@ interface EndpointInterface
      * @param array<string, string|ValueObject>|null $params
      *
      * @return static
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function setParams(?array $params): static;
+    public function setParams(?array $params);
 }

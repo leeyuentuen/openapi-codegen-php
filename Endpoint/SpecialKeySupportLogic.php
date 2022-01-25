@@ -17,7 +17,7 @@ trait SpecialKeySupportLogic
 
         $result = $map[$key];
 
-        if (str_ends_with($result, '[]')) {
+        if (substr_compare($result, '[]', -strlen('[]')) === 0) {
             return rtrim($result, '[]');
         }
 
