@@ -49,6 +49,7 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
     typeMapping.put("Date", "\\ADS\\\\ValueObjects\\\\Implementation\\\\String\\\\DateTimeValue");
     typeMapping.put("DateTime", "\\ADS\\\\ValueObjects\\\\Implementation\\\\String\\\\DateTimeValue");
     typeMapping.put("set", "array");
+    typeMapping.put("object", "array");
 
     this.setTemplateDir(ElasticClientPhpGenerator.GENERATOR_NAME);
     this.embeddedTemplateDir = this.templateDir();
