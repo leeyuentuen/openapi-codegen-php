@@ -105,6 +105,7 @@ abstract class AbstractClient
 
         $this->lastResponse = $response;
 
+        $response->getBody()->rewind();
         $contents = $response->getBody()->getContents();
         $body = json_decode($contents, true);
 
