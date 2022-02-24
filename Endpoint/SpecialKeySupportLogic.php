@@ -11,16 +11,19 @@ trait SpecialKeySupportLogic
      */
     private function convertByMap(string $key, array $map): string
     {
-        if (! array_key_exists($key, $map)) {
-            return $key;
+        return $this->removeArrayBrackets(
+            array_key_exists($key, $map)
+                ? $map[$key]
+                : $key
+        );
+    }
+
+    private function removeArrayBrackets(string $key): string
+    {
+        if (substr_compare($key, '[]', -strlen('[]')) === 0) {
+            return rtrim($key, '[]');
         }
 
-        $result = $map[$key];
-
-        if (substr_compare($result, '[]', -strlen('[]')) === 0) {
-            return rtrim($result, '[]');
-        }
-
-        return $result;
+        return $key;
     }
 }
