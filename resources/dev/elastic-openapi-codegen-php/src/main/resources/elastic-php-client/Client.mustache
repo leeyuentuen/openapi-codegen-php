@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace {{invokerPackage}};
 
-use ADS\Util\ArrayUtil;
 use ADS\ValueObjects\ValueObject;
 {{#models}}{{#model}}use {{importPath}};
 {{/model}}{{/models}}use Elastic\OpenApi\Codegen\AbstractClient;
@@ -66,10 +65,8 @@ use ADS\ValueObjects\ValueObject;
         );
 
         return {{#responses.0.isArray}}{{^responses.0.primitiveType}}array_map(
-            static fn (array $responseItem) => {{responses.0.baseType}}::fromArray(
-                ArrayUtil::toCamelCasedKeys($responseItem, true)
-            ),
+            static fn (array $responseItem) => {{responses.0.baseType}}::fromArray($responseItem),
             $response
-        ){{/responses.0.primitiveType}}{{/responses.0.isArray}}{{^responses.0.isArray}}{{^responses.0.primitiveType}}{{responses.0.baseType}}::fromArray(ArrayUtil::toCamelCasedKeys($response, true)){{/responses.0.primitiveType}}{{/responses.0.isArray}}{{#responses.0.primitiveType}}$response{{/responses.0.primitiveType}};
+        ){{/responses.0.primitiveType}}{{/responses.0.isArray}}{{^responses.0.isArray}}{{^responses.0.primitiveType}}{{responses.0.baseType}}::fromArray($response){{/responses.0.primitiveType}}{{/responses.0.isArray}}{{#responses.0.primitiveType}}$response{{/responses.0.primitiveType}};
     }
 {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}}}
