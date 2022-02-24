@@ -9,16 +9,14 @@ namespace {{modelPackage}};
 use Elastic\OpenApi\Codegen\ImmutableRecords\AnyType;{{#discriminator}}
 use Elastic\OpenApi\Codegen\ImmutableRecords\Discriminator;{{/discriminator}}
 {{/getIsAnyType}}{{^getIsAnyType}}
-use ADS\JsonImmutableObjects\DefaultImmutableProperties;
-use ADS\JsonImmutableObjects\IgnoreExtraProperties;
+use ADS\JsonImmutableObjects\JsonSchemaAwareRecordLogic;
 use Elastic\OpenApi\Codegen\Endpoint\SpecialKeySupportLogic;
 use EventEngine\Data\SpecialKeySupport;
 use EventEngine\JsonSchema\JsonSchemaAwareRecord;{{/getIsAnyType}}
 
 final class {{classname}}{{^getIsAnyType}} implements SpecialKeySupport, JsonSchemaAwareRecord{{/getIsAnyType}}{{#discriminator}} implements Discriminator{{/discriminator}}
 {
-    {{^getIsAnyType}}use IgnoreExtraProperties;
-    use DefaultImmutableProperties;
+    {{^getIsAnyType}}use JsonSchemaAwareRecordLogic;
     use SpecialKeySupportLogic;{{/getIsAnyType}}{{#getIsAnyType}}use AnyType;
     {{#discriminator}}
 
