@@ -53,7 +53,7 @@ use ADS\ValueObjects\ValueObject;
         $parameters = $path + $query;
 
         {{/pathParams.0}}{{/queryParams.0}}
-        {{#responses.0.schema}}/** @var {{#responses.0.primitiveType}}{{responses.0.dataType}}{{#responses.0.isFreeFormObject}}<mixed>{{/responses.0.isFreeFormObject}}{{/responses.0.primitiveType}}{{^responses.0.primitiveType}}array<string, {{#responses.0.isArray}}array<string, mixed>{{/responses.0.isArray}}{{^responses.0.isArray}}mixed{{/responses.0.isArray}}>{{/responses.0.primitiveType}} $response */{{/responses.0.schema}}
+    {{#responses.0.schema}}/** @var {{#responses.0.primitiveType}}{{responses.0.dataType}}{{#responses.0.isFreeFormObject}}<mixed>{{/responses.0.isFreeFormObject}}{{#responses.0.isArray}}<{{responses.0.baseType}}>{{/responses.0.isArray}}{{/responses.0.primitiveType}}{{^responses.0.primitiveType}}array<string, {{#responses.0.isArray}}array<string, mixed>{{/responses.0.isArray}}{{^responses.0.isArray}}mixed{{/responses.0.isArray}}>{{/responses.0.primitiveType}} $response */{{/responses.0.schema}}
         $response = $this->performRequest(
             $this
                 ->endpoint('{{classname}}'){{#queryParams.0}}{{#pathParams.0}}
