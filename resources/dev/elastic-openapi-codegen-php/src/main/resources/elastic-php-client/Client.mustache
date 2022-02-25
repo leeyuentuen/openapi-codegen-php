@@ -23,7 +23,8 @@ use ADS\ValueObjects\ValueObject;
      * Documentation: {{url}}
      *
 {{/externalDocs}}{{#pathParams}}
-     * @param {{dataType}}{{#isContainer}}<{{baseType}}>{{/isContainer}}{{^required}}|null{{/required}} ${{paramName}}{{/pathParams}}
+     * @param {{dataType}}{{#isContainer}}<{{baseType}}>{{/isContainer}}{{^required}}|null{{/required}} ${{paramName}}{{/pathParams}}{{#bodyParams.0}}
+     * @param {{baseType}}{{#isMap}}<mixed>{{/isMap}}{{^required}}|null{{/required}} $body{{/bodyParams.0}}
      *
      * @return {{^responses.0.schema}}mixed{{/responses.0.schema}}{{#responses.0.schema}}{{#responses.0.isArray}}array<{{responses.0.baseType}}>{{/responses.0.isArray}}{{#responses.0.primitiveType}}{{^responses.0.isArray}}{{responses.0.dataType}}{{#responses.0.isFreeFormObject}}<mixed>{{/responses.0.isFreeFormObject}}{{/responses.0.isArray}}{{/responses.0.primitiveType}}{{^responses.0.isArray}}{{^responses.0.primitiveType}}{{responses.0.baseType}}{{/responses.0.primitiveType}}{{/responses.0.isArray}}{{/responses.0.schema}}
      */
