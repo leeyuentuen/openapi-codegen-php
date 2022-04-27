@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{invokerPackage}};
+
+use ADS\ClientMock\RestClientMock;
+use Combell\VaasApi\Client\Client;
+use Combell\VaasApi\Client\ClientBuilder;
+use Mockery\LegacyMockInterface;
+use Mockery\MockInterface;
+
+final class {{clientClass}}Mock extends RestClientMock
+{
+    protected static MockInterface|LegacyMockInterface|null $client = null;
+
+    protected static function factoryClass(): string
+    {
+        return ClientBuilder::class;
+    }
+
+    protected static function clientClass(): string
+    {
+        return Client::class;
+    }
+}

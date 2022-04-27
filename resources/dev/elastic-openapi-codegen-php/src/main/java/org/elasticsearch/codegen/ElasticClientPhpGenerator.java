@@ -73,6 +73,7 @@ public class ElasticClientPhpGenerator extends PhpClientCodegen implements Codeg
 
     supportingFiles.add(new SupportingFile("Client.mustache", "", clientClass.concat(".php")));
     supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
+    supportingFiles.add(new SupportingFile("mock.mustache", "", clientClass.concat("Mock.php")));
   }
 
   @Override
