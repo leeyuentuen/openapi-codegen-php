@@ -14,7 +14,7 @@
     {"name" : "Aurélien FOUCRET", "email": "aurelien.foucret@elastic.co"}
   ],
   "require" : {
-    "php" : "^7.4 || ^8",
+    "php" : "^8",
     "psr/log" : "~1.0",
     "arnedesmedt/json-immutable-objects": "~0.1",
     "arnedesmedt/value-objects": "~0.1",

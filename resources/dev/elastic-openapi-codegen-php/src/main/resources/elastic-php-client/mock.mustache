@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace {{invokerPackage}};
 
 use ADS\ClientMock\RestClientMock;
-use Combell\VaasApi\Client\Client;
-use Combell\VaasApi\Client\ClientBuilder;
 use Mockery\LegacyMockInterface;
 use Mockery\MockInterface;
 
+/**{{#apiInfo.apis}}{{#operations}}{{#operation}}
+ * @method static void {{operationId}}($response, ...$request){{/operation}}{{/operations}}{{/apiInfo.apis}}
+ */
 final class {{clientClass}}Mock extends RestClientMock
 {
     protected static MockInterface|LegacyMockInterface|null $client = null;
