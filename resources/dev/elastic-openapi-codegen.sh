@@ -29,7 +29,7 @@ docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php
                                                                -c /local/resources/api/config.json \
                                                                -t /local/resources/api/templates
 
-cd "${rootdir}" && sudo chown -R "$(id -u):$(id -g)" Client.php Model Endpoint
+cd "${rootdir}" && sudo chown -R "$(id -u):$(id -g)" Client.php ClientMock.php Model Endpoint
 
 if [ -x "${rootdir}/resources/scripts/after_run.sh" ]
 then
@@ -37,4 +37,4 @@ then
 fi
 
 # Exit code of phpcbf is 1 if all is fixed https://github.com/squizlabs/PHP_CodeSniffer/issues/2898
-cd "${rootdir}" && (vendor/bin/phpcbf --extensions=php --report=full ./Client.php ./ClientBuilder.php Model/ Endpoint/ || true)
+cd "${rootdir}" && (vendor/bin/phpcbf --extensions=php --report=full ./Client.php ./ClientMock.php ./ClientBuilder.php Model/ Endpoint/ || true)
