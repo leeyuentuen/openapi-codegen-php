@@ -16,7 +16,7 @@ final class {{clientClass}}Mock extends RestClientMock
     protected static MockInterface|LegacyMockInterface|null $client = null;
 
     /** @var array<string, array<array<string, array<mixed>>>> */
-    private static array $mocks = [];
+    protected static array $mocks = [];
 
     protected static function factoryClass(): string
     {
