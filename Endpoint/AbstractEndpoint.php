@@ -13,6 +13,7 @@ namespace Elastic\OpenApi\Codegen\Endpoint;
 
 use ADS\Util\ArrayUtil;
 use ADS\ValueObjects\ValueObject;
+use EventEngine\Data\ImmutableRecord;
 use UnexpectedValueException;
 
 /**
@@ -145,6 +146,13 @@ abstract class AbstractEndpoint implements EndpointInterface
         if ($this->snakeCasedBody) {
             /** @var array<mixed> $data */
             $data = ArrayUtil::toSnakeCasedKeys($data);
+        }
+
+        if (! ArrayUtil::isAssociative($data)) {
+            $data = array_map(
+                static fn ($item) => $item instanceof ImmutableRecord ? $item->toArray() : $item,
+                $data
+            );
         }
 
         return $data;
