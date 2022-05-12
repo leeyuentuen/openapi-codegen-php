@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace {{invokerPackage}};
 
 use ADS\ClientMock\RestClientMock;
-use Mockery\LegacyMockInterface;
-use Mockery\MockInterface;
 
 /**{{#apiInfo.apis}}{{#operations}}{{#operation}}
  * @method static void {{operationId}}($response, ...$request){{/operation}}{{/operations}}{{/apiInfo.apis}}
  */
 final class {{clientClass}}Mock extends RestClientMock
 {
-    protected static MockInterface|LegacyMockInterface|null $client = null;
+    protected static \Mockery\LegacyMockInterface|\Mockery\LegacyMockInterface|null $client = null;
 
     /** @var array<string, array<array<string, array<mixed>>>> */
     protected static array $mocks = [];
