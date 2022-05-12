@@ -11,7 +11,7 @@ use ADS\ClientMock\RestClientMock;
  */
 final class {{clientClass}}Mock extends RestClientMock
 {
-    protected static \Mockery\LegacyMockInterface|\Mockery\LegacyMockInterface|null $client = null;
+    protected static \Mockery\MockInterface|\Mockery\LegacyMockInterface|null $client = null;
 
     /** @var array<string, array<array<string, array<mixed>>>> */
     protected static array $mocks = [];
