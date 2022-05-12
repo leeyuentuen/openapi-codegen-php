@@ -24,7 +24,7 @@ use ADS\ValueObjects\ValueObject;
      *
 {{/externalDocs}}{{#pathParams}}
      * @param {{dataType}}{{#isContainer}}<{{baseType}}>{{/isContainer}}{{^required}}|null{{/required}} ${{paramName}}{{/pathParams}}{{#bodyParams.0}}
-     * @param {{baseType}}{{#isMap}}<mixed>{{/isMap}}{{^required}}|null{{/required}} $body{{/bodyParams.0}}
+     * @param {{#isContainer}}{{dataType}}<{{baseType}}>{{/isContainer}}{{^isContainer}}{{baseType}}{{#isMap}}<mixed>{{/isMap}}{{/isContainer}}{{^required}}|null{{/required}} $body{{/bodyParams.0}}
      *
      * @return {{^responses.0.schema}}mixed{{/responses.0.schema}}{{#responses.0.schema}}{{#responses.0.isArray}}array<{{responses.0.baseType}}>{{/responses.0.isArray}}{{#responses.0.primitiveType}}{{^responses.0.isArray}}{{responses.0.dataType}}{{#responses.0.isFreeFormObject}}<mixed>{{/responses.0.isFreeFormObject}}{{/responses.0.isArray}}{{/responses.0.primitiveType}}{{^responses.0.isArray}}{{^responses.0.primitiveType}}{{responses.0.baseType}}{{/responses.0.primitiveType}}{{/responses.0.isArray}}{{/responses.0.schema}}
      */
@@ -33,7 +33,7 @@ use ADS\ValueObjects\ValueObject;
     {{/formParams.0}}{{/bodyParams.0}}{{/queryParams.0}}{{/pathParams.0}}{{#queryParams.0}}{{#pathParams.0}},{{/pathParams.0}}
         ?{{operationIdCamelCase}}Query $query = null{{^bodyParams.0}}{{^formParams.0}}
     {{/formParams.0}}{{/bodyParams.0}}{{/queryParams.0}}{{#bodyParams.0}}{{#pathParams.0}},{{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}
-        {{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{bodyParams.0.baseType}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}{{^formParams.0}}
+        {{^bodyParams.0.required}}?{{/bodyParams.0.required}}{{#bodyParams.0.isContainer}}{{bodyParams.0.dataType}}{{/bodyParams.0.isContainer}}{{^bodyParams.0.isContainer}}{{bodyParams.0.baseType}}{{/bodyParams.0.isContainer}} $body{{^bodyParams.0.required}} = null{{/bodyParams.0.required}}{{^formParams.0}}
     {{/formParams.0}}{{/bodyParams.0}}{{#formParams.0}}{{#pathParams.0}},{{/pathParams.0}}{{#queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}{{#bodyParams.0}}{{^queryParams.0}}{{^pathParams.0}},{{/pathParams.0}}{{/queryParams.0}}{{/bodyParams.0}}
         {{^formParams.0.required}}?{{/formParams.0.required}}{{formParams.0.baseType}} $form{{^formParams.0.required}} = null{{/formParams.0.required}}
     {{/formParams.0}}){{#responses.0.schema}}: {{#responses.0.primitiveType}}{{responses.0.dataType}}{{/responses.0.primitiveType}}{{#responses.0.isArray}}{{^responses.0.primitiveType}}{{responses.0.dataType}}{{/responses.0.primitiveType}}{{/responses.0.isArray}}{{^responses.0.isArray}}{{^responses.0.primitiveType}}{{responses.0.baseType}}{{/responses.0.primitiveType}}{{/responses.0.isArray}}{{/responses.0.schema}}{{^pathParams.0}}{{^queryParams.0}}{{^bodyParams.0}}{{^formParams.0}}
@@ -61,7 +61,7 @@ use ADS\ValueObjects\ValueObject;
                 ->setParams($parameters){{/pathParams.0}}{{/queryParams.0}}{{#queryParams.0}}{{^pathParams.0}}
                 ->setParams($parameters){{/pathParams.0}}{{/queryParams.0}}{{#pathParams.0}}{{^queryParams.0}}
                 ->setParams($parameters){{/queryParams.0}}{{/pathParams.0}}{{#bodyParams.0}}
-                ->setBody({{^bodyParams.0.required}}$body !== null ? {{/bodyParams.0.required}}{{#bodyParams.0.isPrimitiveType}}{{^bodyParams.0.isFreeFormObject}}[]{{/bodyParams.0.isFreeFormObject}}{{/bodyParams.0.isPrimitiveType}}{{#bodyParams.0.isFreeFormObject}}(array) $body{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isPrimitiveType}}$body->toArray(){{/bodyParams.0.isPrimitiveType}}{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.required}} : []{{/bodyParams.0.required}}){{/bodyParams.0}}{{#formParams.0}}
+                ->setBody({{^bodyParams.0.required}}$body !== null ? {{/bodyParams.0.required}}{{#bodyParams.0.isPrimitiveType}}{{^bodyParams.0.isFreeFormObject}}[]{{/bodyParams.0.isFreeFormObject}}{{/bodyParams.0.isPrimitiveType}}{{#bodyParams.0.isFreeFormObject}}(array) $body{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isFreeFormObject}}{{^bodyParams.0.isPrimitiveType}}$body{{^bodyParams.0.isContainer}}->toArray(){{/bodyParams.0.isContainer}}{{/bodyParams.0.isPrimitiveType}}{{/bodyParams.0.isFreeFormObject}}{{^bodyParams.0.required}} : []{{/bodyParams.0.required}}){{/bodyParams.0}}{{#formParams.0}}
                 ->setFormData({{#formParams.0.required}}$form->toArray(){{/formParams.0.required}}{{^formParams.0.required}}$form ? $form->toArray() : []{{/formParams.0.required}}){{/formParams.0}}
         );
 
