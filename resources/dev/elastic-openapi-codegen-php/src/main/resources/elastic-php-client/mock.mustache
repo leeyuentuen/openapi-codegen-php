@@ -17,12 +17,12 @@ final class {{clientClass}}Mock extends RestClientMock
     /** @var array<string, array<array<string, array<mixed>>>> */
     protected static array $mocks = [];
 
-    protected static function factoryClass(): string
+    public static function factoryClass(): string
     {
         return ClientBuilder::class;
     }
 
-    protected static function clientClass(): string
+    public static function clientClass(): string
     {
         return Client::class;
     }
