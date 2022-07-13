@@ -23,12 +23,11 @@ then
   "${rootdir}"/resources/scripts/before_run.sh
 fi
 
-#docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php-client \
-#                                                               -i /local/resources/api/api-spec.yml \
-#                                                               -o /local/ \
-#                                                               -c /local/resources/api/config.json \
-#                                                               -t /local/resources/api/templates
-docker run --rm -v "${rootdir}":/local ${generatorimage} ls -al /local/resources
+docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php-client \
+                                                               -i /local/resources/api/api-spec.yml \
+                                                               -o /local/ \
+                                                               -c /local/resources/api/config.json \
+                                                               -t /local/resources/api/templates
 
 cd "${rootdir}" && sudo chown -R "$(id -u):$(id -g)" Client.php ClientMock.php Model Endpoint
 
