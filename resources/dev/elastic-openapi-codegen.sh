@@ -14,7 +14,7 @@ esac
 
 generatordir=$(cd $(dirname $argv0) > /dev/null && cd $generatordir > /dev/null && pwd)
 generatorimage=elastic/elastic-openapi-codegen-php
-rootdir=`cd $(dirname $argv0)/../..; pwd`
+rootdir=`cd $(dirname $argv0)/../../../../../; pwd`
 
 cd "${generatordir}" && docker build --target runner -t ${generatorimage} elastic-openapi-codegen-php
 
