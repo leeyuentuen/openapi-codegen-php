@@ -16,9 +16,6 @@ generatordir=$(cd $(dirname $argv0) > /dev/null && cd $generatordir > /dev/null 
 generatorimage=elastic/elastic-openapi-codegen-php
 rootdir=`cd $(dirname $argv0)/../..; pwd`
 
-echo $rootdir;
-ls -al $rootdir;
-
 cd "${generatordir}" && docker build --target runner -t ${generatorimage} elastic-openapi-codegen-php
 
 if [ -x "${rootdir}/resources/scripts/before_run.sh" ]
@@ -26,11 +23,12 @@ then
   "${rootdir}"/resources/scripts/before_run.sh
 fi
 
-docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php-client \
-                                                               -i /local/resources/api/api-spec.yml \
-                                                               -o /local/ \
-                                                               -c /local/resources/api/config.json \
-                                                               -t /local/resources/api/templates
+#docker run --rm -v "${rootdir}":/local ${generatorimage} generate -g elastic-php-client \
+#                                                               -i /local/resources/api/api-spec.yml \
+#                                                               -o /local/ \
+#                                                               -c /local/resources/api/config.json \
+#                                                               -t /local/resources/api/templates
+docker run --rm -v "${rootdir}":/local ${generatorimage} ls -al /local/resources/api
 
 cd "${rootdir}" && sudo chown -R "$(id -u):$(id -g)" Client.php ClientMock.php Model Endpoint
 
