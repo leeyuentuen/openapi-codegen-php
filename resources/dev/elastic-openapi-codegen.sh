@@ -16,6 +16,9 @@ generatordir=$(cd $(dirname $argv0) > /dev/null && cd $generatordir > /dev/null 
 generatorimage=elastic/elastic-openapi-codegen-php
 rootdir=`cd $(dirname $argv0)/../..; pwd`
 
+echo $rootdir;
+ls -al $rootdir;
+
 cd "${generatordir}" && docker build --target runner -t ${generatorimage} elastic-openapi-codegen-php
 
 if [ -x "${rootdir}/resources/scripts/before_run.sh" ]
