@@ -28,7 +28,7 @@ fi
 #                                                               -o /local/ \
 #                                                               -c /local/resources/api/config.json \
 #                                                               -t /local/resources/api/templates
-docker run --rm -v "${rootdir}":/local ${generatorimage} ls -al /local
+docker run --rm -v "${rootdir}":/local ${generatorimage} ls -al /local/resources
 
 cd "${rootdir}" && sudo chown -R "$(id -u):$(id -g)" Client.php ClientMock.php Model Endpoint
 
