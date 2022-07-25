@@ -19,7 +19,7 @@
     "arnedesmedt/json-immutable-objects": "~0.1",
     "arnedesmedt/value-objects": "~0.1",
     "arnedesmedt/client-mock": "^0.1.3",
-    "guzzlehttp/guzzle": "~6.0",
+    "guzzlehttp/guzzle": "~7.0",
     "arnedesmedt/php-util": "~0.1",
     "ext-json": "*"
   },
@@ -50,5 +50,11 @@
   "prefer-stable": true,
   "bin": [
       "resources/dev/elastic-openapi-codegen.sh"
-  ]
+  ],
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "phpro/grumphp": true
+    }
+  }
 }
