@@ -5,10 +5,9 @@ declare(strict_types=1);
 
 namespace {{modelPackage}};
 {{#model}}
-{{#getIsAnyType}}
-use Elastic\OpenApi\Codegen\ImmutableRecords\AnyType;{{#discriminator}}
-use Elastic\OpenApi\Codegen\ImmutableRecords\Discriminator;{{/discriminator}}
-{{/getIsAnyType}}{{^getIsAnyType}}
+{{#getIsAnyType}}{{#discriminator}}
+use ADS\JsonImmutableObjects\Polymorphism\Discriminator;
+use ADS\JsonImmutableObjects\Polymorphism\DiscriminatorLogic;{{/discriminator}}{{/getIsAnyType}}{{^getIsAnyType}}
 use ADS\JsonImmutableObjects\JsonSchemaAwareRecordLogic;
 use Elastic\OpenApi\Codegen\Endpoint\SpecialKeySupportLogic;
 use EventEngine\Data\SpecialKeySupport;
@@ -17,10 +16,9 @@ use EventEngine\JsonSchema\JsonSchemaAwareRecord;{{/getIsAnyType}}
 final class {{classname}}{{^getIsAnyType}} implements SpecialKeySupport, JsonSchemaAwareRecord{{/getIsAnyType}}{{#discriminator}} implements Discriminator{{/discriminator}}
 {
     {{^getIsAnyType}}use JsonSchemaAwareRecordLogic;
-    use SpecialKeySupportLogic;{{/getIsAnyType}}{{#getIsAnyType}}use AnyType;
-    {{#discriminator}}
+    use SpecialKeySupportLogic;{{/getIsAnyType}}{{#getIsAnyType}}{{#discriminator}}use DiscriminatorLogic;
 
-    public static function discriminatorProperty(): string
+    public static function propertyName(): string
     {
         return '{{propertyName}}';
     }
@@ -28,22 +26,22 @@ final class {{classname}}{{^getIsAnyType}} implements SpecialKeySupport, JsonSch
     /**
     * @inheritDoc
     */
-    public static function discriminatorMapping(): array
+    public static function mapping(): array
     {
         return [{{#mappedModels}}
             '{{mappingName}}' => {{modelName}}::class,{{/mappedModels}}];
-    }{{/discriminator}}
+    }
 
     /**
-    * @return array<class-string>
+    * @inheritDoc
     */
-    public static function models(): array
+    public static function jsonSchemaAwareRecords(): array
     {
         return [{{#interfaceModels}}
             {{name}}::class,{{/interfaceModels}}
         ];
     }
-{{/getIsAnyType}}{{^getIsAnyType}}
+{{/discriminator}}{{/getIsAnyType}}{{^getIsAnyType}}
 
 // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
