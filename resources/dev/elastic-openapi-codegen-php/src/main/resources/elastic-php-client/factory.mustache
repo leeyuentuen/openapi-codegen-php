@@ -1,0 +1,22 @@
+<?php
+{{#models}}
+
+declare(strict_types=1);
+
+namespace {{modelPackage}}Factory;
+{{#model}}
+use ADS\JsonImmutableObjects\FactoryFromArray;
+use {{modelPackage}}Model\{{classname}};
+
+/**
+ * @method static {{name}} fromArray(array $array)
+ */
+class {{name}}
+{
+    use FactoryFromArray;
+
+    protected static function modelClass(): string
+    {
+        return {{name}}::class;
+    }
+}{{/model}}{{/models}}
