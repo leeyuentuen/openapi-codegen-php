@@ -1,15 +1,14 @@
 <?php
 {{#models}}
-
 declare(strict_types=1);
 
 namespace {{modelPackage}}Factory;
 {{#model}}
 use ADS\JsonImmutableObjects\FactoryFromArray;
-use {{modelPackage}}Model\{{name}};
+use {{modelPackage}}Model\{{#lambda.pascalcase}}{{name}}{{/lambda.pascalcase}};
 
 /**
- * @method static {{name}} fromArray(array $array)
+ * @method static {{#lambda.pascalcase}}{{name}}{{/lambda.pascalcase}} fromArray(array $array)
  */
 class {{classname}}
 {
@@ -17,6 +16,6 @@ class {{classname}}
 
     protected static function modelClass(): string
     {
-        return {{name}}::class;
+        return {{#lambda.pascalcase}}{{name}}{{/lambda.pascalcase}}::class;
     }
 }{{/model}}{{/models}}
