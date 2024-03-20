@@ -15,7 +15,7 @@
   ],
   "require" : {
     "php" : "^8",
-    "psr/log" : "~1.0",
+    "psr/log" : "^1|^2|^3",
     "arnedesmedt/json-immutable-objects": "~0.1",
     "arnedesmedt/value-objects": "~0.1",
     "arnedesmedt/client-mock": "^0.1.3",
